@@ -1,0 +1,12 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <Authors>trotlinebeercan</Authors>
+        <Company>trotlinebeercan</Company>
+        <Copyright>Copyright &#169; $([System.DateTime]::Now.Year)</Copyright>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <ProjectDirectoryName>$([System.IO.Path]::GetFileName($(MSBuildProjectDirectory)))</ProjectDirectoryName>
+        <RepositoryUrl>https://github.com/trotlinebeercan/LKGS</RepositoryUrl>
+        <PackageProjectUrl>$(RepositoryUrl)</PackageProjectUrl>
+    </PropertyGroup>
+</Project>
