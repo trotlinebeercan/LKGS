@@ -1,5 +1,6 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
+        <Product>LKGS</Product>
         <Authors>trotlinebeercan</Authors>
         <Company>trotlinebeercan</Company>
         <Copyright>Copyright &#169; $([System.DateTime]::Now.Year)</Copyright>

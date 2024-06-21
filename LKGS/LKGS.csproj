@@ -3,8 +3,6 @@
         <Title>LKGS</Title>
         <Description>Little-Known Galaxy | Instant Subliminal Learner</Description>
         <Version>0.0.0</Version>
-        <Product>LKGS</Product>
-        <AssemblyTitle>LKGS</AssemblyTitle>
-        <AssemblyName>com.trotlinebeercan.lkgs</AssemblyName>
+        <PackageId>com.trotlinebeercan.lkgs</PackageId>
     </PropertyGroup>
 </Project>
