@@ -1,3 +1,4 @@
 # project specific folders
 **/build/*
 **/.vscode/*
+**/Downloads/*
