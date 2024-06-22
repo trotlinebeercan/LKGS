@@ -1,0 +1,45 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+    <PropertyGroup>
+        <LKGSteamRootDir Condition="'$(LKGSteamRootDir)' == ''">D:\SteamLibrary\steamapps\common\Little-Known Galaxy\Little-Known Galaxy_Data\Managed\</LKGSteamRootDir>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Reference Include="Assembly-CSharp" publicize="true">
+            <HintPath>$(LKGSteamRootDir)Assembly-CSharp.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine">
+            <HintPath>$(LKGSteamRootDir)UnityEngine.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.CoreModule">
+            <HintPath>$(LKGSteamRootDir)UnityEngine.CoreModule.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
+</Project>
+
+<!--
+    <ItemGroup>
+        <Reference Include="Cinemachine" publicize="true">
+            <HintPath>$(LKGSteamRootDir)Cinemachine.dll</HintPath>
+        </Reference>
+        <Reference Include="Unity.TextMeshPro" publicize="true">
+            <HintPath>$(LKGSteamRootDir)Unity.TextMeshPro.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine" publicize="true">
+            <HintPath>$(LKGSteamRootDir)UnityEngine.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.CoreModule" publicize="true">
+            <HintPath>$(LKGSteamRootDir)UnityEngine.CoreModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.InputLegacyModule" publicize="true">
+            <HintPath>$(LKGSteamRootDir)UnityEngine.InputLegacyModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.Physics2DModule" publicize="true">
+            <HintPath>$(LKGSteamRootDir)UnityEngine.Physics2DModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UI" publicize="true">
+            <HintPath>$(LKGSteamRootDir)UnityEngine.UI.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+-->

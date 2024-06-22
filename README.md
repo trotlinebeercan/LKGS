@@ -3,3 +3,6 @@ Unity=2021.3.31
 
 dotnet new install BepInEx.Templates --nuget-source https://nuget.bepinex.dev/v3/index.json
 dotnet new bepinex5plugin -n LKGS -T netstandard2.0 -U 2021.3.31
+
+dnSpyEx:
+https://github.com/dnSpyEx/dnSpy/releases/tag/v6.5.0

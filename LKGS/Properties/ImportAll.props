@@ -2,4 +2,5 @@
     <Import Project=".\Build.props"/>
     <Import Project=".\Info.props"/>
     <Import Project=".\PluginInfo.targets"/>
+    <Import Project=".\ExternalGame.props"/>
 </Project>
