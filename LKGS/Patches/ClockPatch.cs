@@ -44,7 +44,7 @@ public class ClockPatch : BasePatch
             new BC.ConfigDescription(
                 "Pause the clock completely. Time will not pass. Resets when you enter/leave a room.",
                 null,
-                new ConfigurationManagerAttributes {Order = --Config.iOrderIndex}
+                new ConfigurationManagerAttributes {Order = ConfigManager.Instance.GetNextOrder()}
             )
         );
     }
