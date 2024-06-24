@@ -1,7 +1,14 @@
 namespace LKGS;
 
-public abstract class BasePatch : UnityEngine.MonoBehaviour
+public abstract class BasePatch
 {
-    public abstract void Initialize(BepInEx.Configuration.ConfigFile config);
-    public abstract void OnTriggerUpdate();
+    protected ConfigManager ConfigManager;
+    public BasePatch(ConfigManager configManager)
+    {
+        ConfigManager = configManager;
+        Initialize();
+    }
+
+    protected abstract void Initialize();
+    protected abstract void OnTriggerUpdate();
 }

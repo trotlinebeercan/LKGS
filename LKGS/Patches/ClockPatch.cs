@@ -9,10 +9,12 @@ namespace LKGS;
 
 public class ClockPatch : BasePatch
 {
-    private BC.ConfigEntry<BC.KeyboardShortcut> bPauseClockToggle { get; set; }
+    private string bPauseClockToggle = "bPauseClockToggle";
     private bool bPauseClock = false;
 
-    public override void OnTriggerUpdate()
+    public ClockPatch(ConfigManager configManager) : base(configManager) {}
+
+    protected override void OnTriggerUpdate()
     {
         // don't try to access something that does not exist
         var timeManager = ScGameManager.Instance?.GetTimeManager();
@@ -27,30 +29,26 @@ public class ClockPatch : BasePatch
 
     private void Update()
     {
-        if (bPauseClockToggle.Value.IsDown())
+        if (ConfigManager.Get<BC.KeyboardShortcut>(bPauseClockToggle).IsDown())
         {
             bPauseClock = !bPauseClock;
             OnTriggerUpdate();
         }
     }
 
-    public override void Initialize(BC.ConfigFile config)
+    protected override void Initialize()
     {
-        // TODO: make this function not suck
-        bPauseClockToggle = config.Bind(
-            "Clock and Time Management",
-            "Pause Clock",
-            new BC.KeyboardShortcut(UE.KeyCode.F2),
-            new BC.ConfigDescription(
+        ConfigManager.StartSection("Clock Management")
+            .Create(bPauseClockToggle, "Pause Clock", new BC.KeyboardShortcut(UE.KeyCode.F2),
                 "Pause the clock completely. Time will not pass. Resets when you enter/leave a room.",
                 null,
-                new ConfigurationManagerAttributes {Order = ConfigManager.Instance.GetNextOrder()}
+                new ConfigurationManagerAttributes {}
             )
-        );
+        .EndSection("Clock Management");
     }
 
-    //[HL.HarmonyPatch(typeof(ScTime), nameof(ScTime.PauseClock))]
-    //[HL.HarmonyPostfix]
+    [HL.HarmonyPatch(typeof(ScTime), nameof(ScTime.PauseClock))]
+    [HL.HarmonyPostfix]
     public static void PauseClock()
     {
         Plugin.GetStoredPatch<ClockPatch>().OnTriggerUpdate();

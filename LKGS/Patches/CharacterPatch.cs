@@ -4,12 +4,14 @@ namespace LKGS;
 
 public class CharacterPatch : BasePatch
 {
-    public override void Initialize(ConfigFile config)
+    public CharacterPatch(ConfigManager configManager) : base(configManager) {}
+
+    protected override void Initialize()
     {
         // throw new System.NotImplementedException();
     }
 
-    public override void OnTriggerUpdate()
+    protected override void OnTriggerUpdate()
     {
         // throw new System.NotImplementedException();
     }

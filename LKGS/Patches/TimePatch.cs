@@ -1,17 +1,18 @@
-using UE = UnityEngine;
-
+using HL = HarmonyLib;
 namespace LKGS;
 
 public class TimePatch : BasePatch
 {
-    private BepInEx.Configuration.ConfigEntry<bool> bClockSlowDownEnable { get; set; }
-    private BepInEx.Configuration.ConfigEntry<int> iClockSlowDownMultiplier { get; set; }
+    private string bClockSlowDownEnableId = "bClockSlowDownEnable";
+    private string iClockSlowDownMultiplier = "iClockSlowDownMultiplier";
 
     private const float fGameFpsTarget = 60.0f;
     private const float fDefaultRealMinPerGameHr = 0.65f;
 
     private float fRealMinPerGameHr;
     private float fGameSecPerRealSec;
+
+    public TimePatch(ConfigManager configManager) : base(configManager) {}
 
     private void UpdateTimeManager()
     {
@@ -30,15 +31,15 @@ public class TimePatch : BasePatch
         fGameSecPerRealSec = fGameFpsTarget / fDefaultRealMinPerGameHr;
     }
 
-    public override void OnTriggerUpdate()
+    protected override void OnTriggerUpdate()
     {
         // initially set the values back to default
         SetAllPatchedValuesToDefaultValues();
 
         // if we want to slow the clock down, apply the multiplier
-        if (bClockSlowDownEnable.Value)
+        if (ConfigManager.Get<bool>(bClockSlowDownEnableId))
         {
-            fRealMinPerGameHr  = fDefaultRealMinPerGameHr * iClockSlowDownMultiplier.Value;
+            fRealMinPerGameHr  = fDefaultRealMinPerGameHr * ConfigManager.Get<int>(iClockSlowDownMultiplier);
             fGameSecPerRealSec = fGameFpsTarget / fRealMinPerGameHr;
         }
 
@@ -46,39 +47,31 @@ public class TimePatch : BasePatch
         UpdateTimeManager();
     }
 
-    private void OnEnable()
+    protected override void Initialize()
     {
-        // when we enable, let logic take over
         SetAllPatchedValuesToDefaultValues();
+
+        ConfigManager
+            .StartSection("Time Management")
+                .Create(bClockSlowDownEnableId, "Enable Clock Slowdown", false,
+                    "Slow the rate at which the clock moves forward.",
+                    null,
+                    new ConfigurationManagerAttributes {},
+                    (_, _) => { OnTriggerUpdate(); }
+                )
+                .Create(iClockSlowDownMultiplier, "Clock Speed Multiplier", 1,
+                    "Set the time multiplier, making the day 'N' times longer.",
+                    new BepInEx.Configuration.AcceptableValueRange<int>(2, 8),
+                    new ConfigurationManagerAttributes {ShowRangeAsPercent = false},
+                    (_, _) => { OnTriggerUpdate(); }
+                )
+            .EndSection("Time Management");
     }
 
-    public override void Initialize(BepInEx.Configuration.ConfigFile config)
+    [HL.HarmonyPatch(typeof(ScTime), nameof(ScTime.SetUpManager))]
+    [HL.HarmonyPrefix]
+    public static void SetUpManager()
     {
-        ConfigManager cm = ConfigManager.Instance;
-
-        // TODO: make this function not suck
-        bClockSlowDownEnable = config.Bind(
-            "Clock and Time Management",
-            "Enable Clock Slowdown",
-            false,
-            new BepInEx.Configuration.ConfigDescription(
-                "Slow the rate at which the clock moves forward.",
-                null,
-                new ConfigurationManagerAttributes {Order = cm.GetNextOrder()}
-            )
-        );
-        bClockSlowDownEnable.SettingChanged += (_, _) => { OnTriggerUpdate(); };
-
-        iClockSlowDownMultiplier = config.Bind(
-            "Clock and Time Management",
-            "Clock Slowdown Multiplier",
-            1,
-            new BepInEx.Configuration.ConfigDescription(
-                "Set the time multiplier, making the day 'N' times longer.",
-                new BepInEx.Configuration.AcceptableValueRange<int>(2, 8),
-                new ConfigurationManagerAttributes {ShowRangeAsPercent = false, Order = cm.GetNextOrder()}
-            )
-        );
-        iClockSlowDownMultiplier.SettingChanged += (_, _) => OnTriggerUpdate();
+        Plugin.GetStoredPatch<TimePatch>().OnTriggerUpdate();
     }
 }
