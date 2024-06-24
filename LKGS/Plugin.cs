@@ -27,7 +27,9 @@ public class Plugin : BepInEx.BaseUnityPlugin
 
         // allocate plugins
         CreateAndStorePatch<TimePatch>(Config);
-        CreateAndStorePatch<ClockPatch>(Config);
+
+        // disabling this for now, until I can figure out what is going on
+        // CreateAndStorePatch<ClockPatch>(Config);
     }
 
     private void ChangedActiveScene(SM.Scene current, SM.Scene next)
