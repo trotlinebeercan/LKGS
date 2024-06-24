@@ -9,12 +9,10 @@ namespace LKGS;
 
 public class ClockPatch : BasePatch
 {
-    private string bPauseClockToggle = "bPauseClockToggle";
+    private string bPauseClockAction = "bPauseClockAction";
     private bool bPauseClock = false;
 
-    public ClockPatch(ConfigManager configManager) : base(configManager) {}
-
-    protected override void OnTriggerUpdate()
+    public override void OnTriggerUpdate()
     {
         // don't try to access something that does not exist
         var timeManager = ScGameManager.Instance?.GetTimeManager();
@@ -24,22 +22,30 @@ public class ClockPatch : BasePatch
         if (timeManager.pauseClock == bPauseClock) return;
 
         // do the thing
+        Plugin.D($"doing the thing {bPauseClock}");
         timeManager.PauseClock(bPauseClock);
     }
 
     private void Update()
     {
-        if (ConfigManager.Get<BC.KeyboardShortcut>(bPauseClockToggle).IsDown())
+        if (ConfigManager.Instance.GetValue<BC.KeyboardShortcut>(bPauseClockAction).IsDown())
         {
+            Plugin.D("Update detected keyboard shortcut hit");
             bPauseClock = !bPauseClock;
             OnTriggerUpdate();
         }
     }
 
-    protected override void Initialize()
+    public override void OnActiveSceneChanged()
     {
-        ConfigManager.StartSection("Clock Management")
-            .Create(bPauseClockToggle, "Pause Clock", new BC.KeyboardShortcut(UE.KeyCode.F2),
+        //Plugin.D("lol");
+        //kConfigManager.Get<BC.KeyboardShortcut>(bPauseClockAction);
+    }
+
+    public override void Initialize()
+    {
+        ConfigManager.Instance.StartSection("Clock Management")
+            .Create(bPauseClockAction, "Pause Clock", new BC.KeyboardShortcut(UE.KeyCode.F2),
                 "Pause the clock completely. Time will not pass. Resets when you enter/leave a room.",
                 null,
                 new ConfigurationManagerAttributes {}
@@ -48,9 +54,10 @@ public class ClockPatch : BasePatch
     }
 
     [HL.HarmonyPatch(typeof(ScTime), nameof(ScTime.PauseClock))]
-    [HL.HarmonyPostfix]
-    public static void PauseClock()
+    [HL.HarmonyPrefix]
+    public static void PauseClock(bool pause)
     {
-        Plugin.GetStoredPatch<ClockPatch>().OnTriggerUpdate();
+        Plugin.GetStoredPatch<ClockPatch>().bPauseClock = pause;
+        //Plugin.GetStoredPatch<ClockPatch>().OnTriggerUpdate();
     }
 }

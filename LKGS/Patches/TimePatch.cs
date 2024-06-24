@@ -12,8 +12,6 @@ public class TimePatch : BasePatch
     private float fRealMinPerGameHr;
     private float fGameSecPerRealSec;
 
-    public TimePatch(ConfigManager configManager) : base(configManager) {}
-
     private void UpdateTimeManager()
     {
         // don't try to access something that does not exist
@@ -22,6 +20,8 @@ public class TimePatch : BasePatch
 
         timeManager.realMinPerGameHr.floatValue = fRealMinPerGameHr;
         timeManager.gameSecPerRealSec = fGameSecPerRealSec;
+
+        Plugin.D($"New values: m/gh={timeManager.realMinPerGameHr.floatValue}, gs/s={timeManager.gameSecPerRealSec}");
     }
 
     private void SetAllPatchedValuesToDefaultValues()
@@ -31,15 +31,15 @@ public class TimePatch : BasePatch
         fGameSecPerRealSec = fGameFpsTarget / fDefaultRealMinPerGameHr;
     }
 
-    protected override void OnTriggerUpdate()
+    public override void OnTriggerUpdate()
     {
         // initially set the values back to default
         SetAllPatchedValuesToDefaultValues();
 
         // if we want to slow the clock down, apply the multiplier
-        if (ConfigManager.Get<bool>(bClockSlowDownEnableId))
+        if (ConfigManager.Instance.GetValue<bool>(bClockSlowDownEnableId))
         {
-            fRealMinPerGameHr  = fDefaultRealMinPerGameHr * ConfigManager.Get<int>(iClockSlowDownMultiplier);
+            fRealMinPerGameHr  = fDefaultRealMinPerGameHr * ConfigManager.Instance.GetValue<int>(iClockSlowDownMultiplier);
             fGameSecPerRealSec = fGameFpsTarget / fRealMinPerGameHr;
         }
 
@@ -47,12 +47,11 @@ public class TimePatch : BasePatch
         UpdateTimeManager();
     }
 
-    protected override void Initialize()
+    public override void Initialize()
     {
         SetAllPatchedValuesToDefaultValues();
 
-        ConfigManager
-            .StartSection("Time Management")
+        ConfigManager.Instance.StartSection("Time Management")
                 .Create(bClockSlowDownEnableId, "Enable Clock Slowdown", false,
                     "Slow the rate at which the clock moves forward.",
                     null,

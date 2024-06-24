@@ -1,19 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-
+using System.Linq;
+using BepInEx.Configuration;
 using BC = BepInEx.Configuration;
 
 namespace LKGS;
 
-public class ConfigManager
+public class ConfigManager : SingletonBase<ConfigManager>
 {
     protected Dictionary<string, BC.ConfigDefinition> Entries { get; } = new Dictionary<string, BC.ConfigDefinition>();
 
     private string sCurrentSection = "";
 
     private BC.ConfigFile Config;
-    public ConfigManager(BC.ConfigFile config)
+    public void Initialize(BC.ConfigFile config)
     {
         Config = config;
     }
@@ -53,7 +54,12 @@ public class ConfigManager
         return this;
     }
 
-    public T Get<T>(string key)
+    public ConfigEntry<T> Get<T>(string key)
+    {
+        return Config[Entries[key]] as ConfigEntry<T>;
+    }
+
+    public T GetValue<T>(string key)
     {
         return (T)Config[Entries[key]].BoxedValue;
     }

@@ -1,14 +1,8 @@
 namespace LKGS;
 
-public abstract class BasePatch
+public abstract class BasePatch : UnityEngine.MonoBehaviour
 {
-    protected ConfigManager ConfigManager;
-    public BasePatch(ConfigManager configManager)
-    {
-        ConfigManager = configManager;
-        Initialize();
-    }
-
-    protected abstract void Initialize();
-    protected abstract void OnTriggerUpdate();
+    public abstract void Initialize();
+    public virtual void OnTriggerUpdate() {}
+    public virtual void OnActiveSceneChanged() {}
 }

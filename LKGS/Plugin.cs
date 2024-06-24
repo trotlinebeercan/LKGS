@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
+using BC = BepInEx.Configuration;
+using HL = HarmonyLib;
 using SM = UnityEngine.SceneManagement;
 
 namespace LKGS;
@@ -10,41 +12,48 @@ namespace LKGS;
 [BepInEx.BepInPlugin(PluginInfo.kPackageId, PluginInfo.kTitle, PluginInfo.kVersion)]
 public class Plugin : BepInEx.BaseUnityPlugin
 {
-    private static BepInEx.Logging.ManualLogSource kLog { get; set; }
-    private static HarmonyLib.Harmony kHarmony { get; set; }
-    private static ConfigManager kConfigManager { get; set; }
-    private static List<BasePatch> kAllPatches = new();
+    protected static BepInEx.Logging.ManualLogSource kLog { get; private set; }
+    protected static HL.Harmony kHarmony { get; private set; }
+    protected static List<BasePatch> kAllPatches = new();
 
     private void Awake()
     {
+        Logger.LogInfo($"Hello world, from {PluginInfo.kTitle}!");
+
         // set the global logger
         kLog = Logger;
 
-        // initialize config manager
-        kConfigManager = new(Config);
+        // initialize lazy config manager
+        ConfigManager.Instance.Initialize(Config);
 
         // initialize harmonyx
-        kHarmony = new HarmonyLib.Harmony(PluginInfo.kPackageId);
+        kHarmony = new HL.Harmony(PluginInfo.kPackageId);
 
         // attach the scene manager
         SM.SceneManager.activeSceneChanged += ChangedActiveScene;
 
         // allocate plugins
-        CreateAndStorePatch(p => new TimePatch(kConfigManager));
-        CreateAndStorePatch(p => new CharacterPatch(kConfigManager));
+        CreateAndStorePatch<TimePatch>();
+        CreateAndStorePatch<CharacterPatch>();
 
         // disabling this for now, until I can figure out what is going on
-        // CreateAndStorePatch<ClockPatch>(Config);
+        CreateAndStorePatch<ClockPatch>();
     }
 
     private void ChangedActiveScene(SM.Scene current, SM.Scene next)
     {
-        L($"ChangedActiveScene | current={current.name}, next={next.name}");
+        D($"ChangedActiveScene | current={current.name}, next={next.name}");
+        kAllPatches.ForEach(p => p.OnActiveSceneChanged());
     }
 
-    private void CreateAndStorePatch<T>(Func<ConfigManager,T> alloc) where T : BasePatch
+    private void CreateAndStorePatch<T>() where T : BasePatch, new()
     {
-        T patch = alloc(kConfigManager);
+        bool isUnityObject = typeof(T).IsSubclassOf(typeof(UnityEngine.MonoBehaviour));
+
+        D($"Creating Patch {typeof(T)} - isUnityObject={isUnityObject}");
+
+        T patch = isUnityObject ? (T)gameObject.AddComponent(typeof(T)) : new();
+        patch.Initialize();
         kHarmony?.PatchAll(typeof(T));
         kAllPatches.Add(patch);
     }
