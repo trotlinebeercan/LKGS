@@ -1,6 +1,7 @@
 using UE = UnityEngine;
 
 namespace LKGS;
+
 public class TimePatch : BasePatch
 {
     private BepInEx.Configuration.ConfigEntry<bool> bPauseClockEnable { get; set; }
@@ -30,7 +31,7 @@ public class TimePatch : BasePatch
         fGameSecPerRealSec = fGameFpsTarget / fDefaultRealMinPerGameHr;
     }
 
-    private void OnTriggerUpdate()
+    public override void OnTriggerUpdate()
     {
         // initially set the values back to default
         SetAllPatchedValuesToDefaultValues();
