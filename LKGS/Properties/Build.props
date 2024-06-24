@@ -8,6 +8,11 @@
         <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
     </PropertyGroup>
 
+    <PropertyGroup>
+        <MSBuildProjectExtensionsPath>$(SolutionDir)build</MSBuildProjectExtensionsPath>
+        <BaseIntermediateOutputPath>$(MSBuildProjectExtensionsPath)\obj</BaseIntermediateOutputPath>
+    </PropertyGroup>
+
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
         <DebugType>portable</DebugType>
     </PropertyGroup>
