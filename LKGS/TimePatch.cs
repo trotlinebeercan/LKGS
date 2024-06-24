@@ -60,10 +60,11 @@ public class TimePatch : BasePatch
 
     public override void Initialize(BepInEx.Configuration.ConfigFile config)
     {
+        // TODO: make this function not suck
         int elementOrder = 100;
 
         bPauseClockEnable = config.Bind(
-            "ooooo Clock and Time Management ooooo",
+            "Clock and Time Management",
             "Pause Clock",
             false,
             new BepInEx.Configuration.ConfigDescription(
@@ -72,10 +73,10 @@ public class TimePatch : BasePatch
                 new ConfigurationManagerAttributes {Order = --elementOrder}
             )
         );
-        bPauseClockEnable.SettingChanged += (_, _) => { OnTriggerUpdate(); NotifyUserOfChangesToClock(); };
+        bPauseClockEnable.SettingChanged += (_, _) => { NotifyUserOfChangesToClock(); OnTriggerUpdate(); };
 
         bClockSlowDownEnable = config.Bind(
-            "ooooo Clock and Time Management ooooo",
+            "Clock and Time Management",
             "Enable Clock Slowdown",
             false,
             new BepInEx.Configuration.ConfigDescription(
@@ -84,10 +85,10 @@ public class TimePatch : BasePatch
                 new ConfigurationManagerAttributes {Order = --elementOrder}
             )
         );
-        bClockSlowDownEnable.SettingChanged += (_, _) => { OnTriggerUpdate(); NotifyUserOfChangesToClock(); };
+        bClockSlowDownEnable.SettingChanged += (_, _) => { NotifyUserOfChangesToClock(); OnTriggerUpdate(); };
 
         iClockSlowDownMultiplier = config.Bind(
-            "ooooo Clock and Time Management ooooo",
+            "Clock and Time Management",
             "Clock Slowdown Multiplier",
             1,
             new BepInEx.Configuration.ConfigDescription(
