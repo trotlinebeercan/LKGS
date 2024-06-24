@@ -18,8 +18,6 @@ public class ClockPatch : BasePatch
     public override void Initialize(BepInEx.Configuration.ConfigFile config)
     {
         // TODO: make this function not suck
-        int elementOrder = 100;
-
         bPauseClockEnable = config.Bind(
             "Clock and Time Management",
             "Pause Clock",
@@ -27,7 +25,7 @@ public class ClockPatch : BasePatch
             new BepInEx.Configuration.ConfigDescription(
                 "Pause the clock completely. Time will not pass",
                 null,
-                new ConfigurationManagerAttributes {Order = --elementOrder}
+                new ConfigurationManagerAttributes {Order = --Config.iOrderIndex}
             )
         );
         bPauseClockEnable.SettingChanged += (_, _) => { OnTriggerUpdate(); };

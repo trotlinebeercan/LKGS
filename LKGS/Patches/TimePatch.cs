@@ -55,8 +55,6 @@ public class TimePatch : BasePatch
     public override void Initialize(BepInEx.Configuration.ConfigFile config)
     {
         // TODO: make this function not suck
-        int elementOrder = 100;
-
         bClockSlowDownEnable = config.Bind(
             "Clock and Time Management",
             "Enable Clock Slowdown",
@@ -64,7 +62,7 @@ public class TimePatch : BasePatch
             new BepInEx.Configuration.ConfigDescription(
                 "Slow the rate at which the clock moves forward.",
                 null,
-                new ConfigurationManagerAttributes {Order = --elementOrder}
+                new ConfigurationManagerAttributes {Order = --Config.iOrderIndex}
             )
         );
         bClockSlowDownEnable.SettingChanged += (_, _) => { OnTriggerUpdate(); };
@@ -76,7 +74,7 @@ public class TimePatch : BasePatch
             new BepInEx.Configuration.ConfigDescription(
                 "Set the time multiplier, making the day 'N' times longer.",
                 new BepInEx.Configuration.AcceptableValueRange<int>(2, 8),
-                new ConfigurationManagerAttributes {ShowRangeAsPercent = false, Order = --elementOrder}
+                new ConfigurationManagerAttributes {ShowRangeAsPercent = false, Order = --Config.iOrderIndex}
             )
         );
         iClockSlowDownMultiplier.SettingChanged += (_, _) => OnTriggerUpdate();
