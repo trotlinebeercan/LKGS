@@ -36,7 +36,7 @@ public class TimePatch : BasePatch
         SetAllPatchedValuesToDefaultValues();
 
         // if we want to slow the clock down, apply the multiplier
-        else if (bClockSlowDownEnable.Value)
+        if (bClockSlowDownEnable.Value)
         {
             fRealMinPerGameHr  = fDefaultRealMinPerGameHr * iClockSlowDownMultiplier.Value;
             fGameSecPerRealSec = fGameFpsTarget / fRealMinPerGameHr;
