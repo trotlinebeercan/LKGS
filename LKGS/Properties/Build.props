@@ -4,15 +4,33 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <LangVersion>latest</LangVersion>
         <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
     </PropertyGroup>
 
-    <PropertyGroup>
-        <CommonIntermediateOutputRoot>$(LKGSSolutionDir)build\</CommonIntermediateOutputRoot>
-        <BaseIntermediateOutputPath>$(CommonIntermediateOutputRoot)$(Configuration)\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
-        <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
-        <BinariesFolder>$(CommonIntermediateOutputRoot)bin</BinariesFolder>
-        <CommonOutputDirectory>$(BinariesFolder)\$(Configuration)</CommonOutputDirectory>
-        <OutDir>$(CommonOutputDirectory)\</OutDir>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+        <DebugType>portable</DebugType>
+    </PropertyGroup>
+
+    <!--Default all references to CopyLocal False.-->
+    <ItemDefinitionGroup>
+        <Reference>
+            <Private>False</Private>
+        </Reference>
+        <ProjectReference>
+            <Private>False</Private>
+        </ProjectReference>
+        <PackageReference>
+            <Private>False</Private>
+        </PackageReference>
+    </ItemDefinitionGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+        <OutputPath>D:\SteamLibrary\steamapps\common\Little-Known Galaxy\BepInEx\plugins\$(MSBuildProjectName)</OutputPath>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+        <OutputPath>D:\SteamLibrary\steamapps\common\Little-Known Galaxy\BepInEx\plugins\$(MSBuildProjectName)</OutputPath>
     </PropertyGroup>
 
     <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
