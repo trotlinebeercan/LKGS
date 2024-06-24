@@ -4,7 +4,6 @@ namespace LKGS;
 
 public class TimePatch : BasePatch
 {
-    private BepInEx.Configuration.ConfigEntry<bool> bPauseClockEnable { get; set; }
     private BepInEx.Configuration.ConfigEntry<bool> bClockSlowDownEnable { get; set; }
     private BepInEx.Configuration.ConfigEntry<int> iClockSlowDownMultiplier { get; set; }
 
@@ -36,12 +35,7 @@ public class TimePatch : BasePatch
         // initially set the values back to default
         SetAllPatchedValuesToDefaultValues();
 
-        // if the clock is paused, set the values to something very close to 0 and do nothing else
-        if (bPauseClockEnable.Value)
-        {
-            fRealMinPerGameHr = fGameSecPerRealSec = 0.0001f;
-        }
-        // else if we want to slow the clock down, apply the multiplier
+        // if we want to slow the clock down, apply the multiplier
         else if (bClockSlowDownEnable.Value)
         {
             fRealMinPerGameHr  = fDefaultRealMinPerGameHr * iClockSlowDownMultiplier.Value;
@@ -63,18 +57,6 @@ public class TimePatch : BasePatch
         // TODO: make this function not suck
         int elementOrder = 100;
 
-        bPauseClockEnable = config.Bind(
-            "Clock and Time Management",
-            "Pause Clock",
-            false,
-            new BepInEx.Configuration.ConfigDescription(
-                "Pause the clock completely. Time will not pass",
-                null,
-                new ConfigurationManagerAttributes {Order = --elementOrder}
-            )
-        );
-        bPauseClockEnable.SettingChanged += (_, _) => { NotifyUserOfChangesToClock(); OnTriggerUpdate(); };
-
         bClockSlowDownEnable = config.Bind(
             "Clock and Time Management",
             "Enable Clock Slowdown",
@@ -85,7 +67,7 @@ public class TimePatch : BasePatch
                 new ConfigurationManagerAttributes {Order = --elementOrder}
             )
         );
-        bClockSlowDownEnable.SettingChanged += (_, _) => { NotifyUserOfChangesToClock(); OnTriggerUpdate(); };
+        bClockSlowDownEnable.SettingChanged += (_, _) => { OnTriggerUpdate(); };
 
         iClockSlowDownMultiplier = config.Bind(
             "Clock and Time Management",
@@ -98,20 +80,5 @@ public class TimePatch : BasePatch
             )
         );
         iClockSlowDownMultiplier.SettingChanged += (_, _) => OnTriggerUpdate();
-    }
-
-    private void NotifyUserOfChangesToClock() // TODO: move this out of here and into some UI/Notif manager
-    {
-        var notifManager = ScGameManager.Instance?.notificationManager;
-        if (notifManager == null) return;
-
-        string message = bPauseClockEnable.Value ? "Paused" : bClockSlowDownEnable.Value ? "Slowed" : "Running";
-        ScTextSet textSet = new ScTextSet
-        {
-            BoxType = BoxType.Notification,
-            Text = $"Hello Amelia! Clock is {message}"
-        };
-        ScGeneralText clockStatusChanged = new ScGeneralText("key", true, new ScTextSet[]{textSet});
-        notifManager.AddNotificationToQueue(clockStatusChanged, notifManager.spacePackIcon, true);
     }
 }
