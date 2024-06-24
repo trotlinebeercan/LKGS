@@ -52,19 +52,10 @@ public class TimePatch : BasePatch
         UpdateTimeManager();
     }
 
-    private void OnDisable()
-    {
-        // when we disable, just reset back to default
-        SetAllPatchedValuesToDefaultValues();
-        // don't trigger logic, just update with defaults
-        UpdateTimeManager();
-    }
-
-    private void Awake()
+    private void OnEnable()
     {
         // when we enable, let logic take over
         SetAllPatchedValuesToDefaultValues();
-        OnTriggerUpdate();
     }
 
     public override void Initialize(BepInEx.Configuration.ConfigFile config)
