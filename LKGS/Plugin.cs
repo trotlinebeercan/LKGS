@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Reflection;
 
+using SM = UnityEngine.SceneManagement;
+
 namespace LKGS;
 
 [BepInEx.BepInPlugin(PluginInfo.kPackageId, PluginInfo.kTitle, PluginInfo.kVersion)]
@@ -13,8 +15,16 @@ public class Plugin : BepInEx.BaseUnityPlugin
         // set the global logger
         Log = Logger;
 
+        // attach the scene manager
+        SM.SceneManager.activeSceneChanged += ChangedActiveScene;
+
         // allocate plugins
         InitializePatch<TimePatch>(Config);
+    }
+
+    private void ChangedActiveScene(SM.Scene current, SM.Scene next)
+    {
+        L($"ChangedActiveScene | current={current.name}, next={next.name}");
     }
 
     private BasePatch InitializePatch<T>(BepInEx.Configuration.ConfigFile config)
