@@ -2,8 +2,8 @@
     <PropertyGroup>
         <AssemblyTitle>$(Title)</AssemblyTitle>
         <PackageOutputPath>$(OutputPath)</PackageOutputPath>
-        <ThunderPackagingRoot>$(PackageOutputPath)\..\</ThunderPackagingRoot>
-        <ThunderPackagingPath>$(PackageOutputPath)\</ThunderPackagingPath>
+        <ThunderPackagingRoot>$(PackageOutputPath)\..\..\</ThunderPackagingRoot>
+        <ThunderPackagingPath>$(PackageOutputPath)\..\</ThunderPackagingPath>
     </PropertyGroup>
 
     <Target Name="_ThunderStoreDependencies" BeforeTargets="_GeneratePluginManifest" AfterTargets="Build">
@@ -28,15 +28,15 @@
             </_GeneratedManifestText>
         </PropertyGroup>
 
-        <WriteLinesToFile Lines="$(_GeneratedManifestText)" File="$(ThunderPackagingPath)\manifest.json" WriteOnlyWhenDifferent="true" Overwrite="true"/>
+        <WriteLinesToFile Lines="$(_GeneratedManifestText)" File="$(PackageOutputPath)\manifest.json" WriteOnlyWhenDifferent="true" Overwrite="true"/>
     </Target>
 
-    <Target Name="_CopyPluginIcons" AfterTargets="_GeneratePluginManifest" Outputs="$(ThunderPackagingPath)icon.png">
+    <Target Name="_CopyPluginIcons" AfterTargets="_GeneratePluginManifest" Outputs="$(PackageOutputPath)icon.png">
         <PropertyGroup>
             <PackageIcon Condition="Exists('$(ProjectDir)icon.png')">$(ProjectDir)icon.png</PackageIcon>
             <PackageIcon Condition="'$(PackageIcon)' == ''">$(DefaultPackageIcon)</PackageIcon>
         </PropertyGroup>
-        <Copy SourceFiles="$(PackageIcon)" DestinationFolder="$(ThunderPackagingPath)"/>
+        <Copy SourceFiles="$(PackageIcon)" DestinationFolder="$(PackageOutputPath)"/>
     </Target>
 
     <ItemGroup>

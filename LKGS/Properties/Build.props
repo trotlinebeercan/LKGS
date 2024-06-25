@@ -54,7 +54,7 @@
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-        <OutputPath>$(SolutionDir)release\$(MSBuildProjectName)</OutputPath>
+        <OutputPath>$(SolutionDir)release\stage\$(MSBuildProjectName)</OutputPath>
     </PropertyGroup>
 
     <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
