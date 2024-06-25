@@ -4,9 +4,6 @@ using UE = UnityEngine;
 
 namespace LKGS;
 
-// NOTE: this does not work as expected... weird things happen
-//       do not try this at home (or do, idgaf)
-
 public class ClockPatch : UE.MonoBehaviour, IPatch
 {
     private string bEnablePauseClockToggleId = "bEnablePauseClockToggle";
@@ -23,7 +20,7 @@ public class ClockPatch : UE.MonoBehaviour, IPatch
         if (timeManager.pauseClock == bPauseClock) return;
 
         // do the thing
-        Plugin.D($"doing the thing {bPauseClock}");
+        Plugin.D($"Setting clock state, paused={bPauseClock}");
         timeManager.PauseClock(bPauseClock);
     }
 
@@ -32,6 +29,7 @@ public class ClockPatch : UE.MonoBehaviour, IPatch
         if (ConfigManager.Instance.GetValue<bool>(bEnablePauseClockToggleId) &&
             ConfigManager.Instance.GetValue<BC.KeyboardShortcut>(kPauseClockActionId).IsDown())
         {
+            // invert what we think the clock state currently is
             bPauseClock = !bPauseClock;
             OnTriggerUpdate();
         }
