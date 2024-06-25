@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 
@@ -22,6 +23,12 @@ public class Plugin : BepInEx.BaseUnityPlugin
 
         // set the global logger
         kLog = Logger;
+
+#if false // enable to delete the config file and force defaults (for testing)
+        File.Delete(Config.ConfigFilePath);
+        Config.Do(kvp => kvp.Value.BoxedValue = kvp.Value.DefaultValue);
+        Config.Save();
+#endif
 
         // initialize lazy config manager
         ConfigManager.Instance.Initialize(Config);
