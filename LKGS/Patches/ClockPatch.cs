@@ -48,7 +48,7 @@ public class ClockPatch : UE.MonoBehaviour, IPatch
             .Create(bPauseClockAction, "Pause Clock", new BC.KeyboardShortcut(UE.KeyCode.F2),
                 "Pause the clock completely. Time will not pass. Resets when you enter/leave a room.",
                 null,
-                new ConfigurationManagerAttributes {}
+                new ConfigurationManagerAttributes {IsAdvanced = true}
             )
         .EndSection("Clock Management");
     }
