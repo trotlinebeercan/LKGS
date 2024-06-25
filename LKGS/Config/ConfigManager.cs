@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using BepInEx.Configuration;
 using BC = BepInEx.Configuration;
 
 namespace LKGS;
@@ -54,9 +53,9 @@ public class ConfigManager : SingletonBase<ConfigManager>
         return this;
     }
 
-    public ConfigEntry<T> Get<T>(string key)
+    public BC.ConfigEntry<T> Get<T>(string key)
     {
-        return Config[Entries[key]] as ConfigEntry<T>;
+        return Config[Entries[key]] as BC.ConfigEntry<T>;
     }
 
     public T GetValue<T>(string key)
