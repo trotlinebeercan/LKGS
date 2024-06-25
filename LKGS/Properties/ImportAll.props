@@ -1,6 +1,6 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <Import Project=".\Build.props"/>
-    <Import Project=".\Info.props"/>
     <Import Project=".\PluginInfo.targets"/>
     <Import Project=".\ExternalGame.props"/>
+    <Import Condition=" '$(Configuration)' == 'Release' " Project=".\Thunderstore.props"/>
 </Project>

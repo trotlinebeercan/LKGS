@@ -7,6 +7,19 @@
         <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+        <GenerateDependencyFile>false</GenerateDependencyFile>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <Product>LKGS</Product>
+        <Authors>trotlinebeercan</Authors>
+        <Company>trotlinebeercan</Company>
+        <Copyright>Copyright &#169; $([System.DateTime]::Now.Year) trotlinebeercan</Copyright>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <ProjectDirectoryName>$([System.IO.Path]::GetFileName($(MSBuildProjectDirectory)))</ProjectDirectoryName>
+        <RepositoryUrl>https://github.com/trotlinebeercan/LKGS</RepositoryUrl>
+        <PackageProjectUrl>$(RepositoryUrl)</PackageProjectUrl>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -16,6 +29,11 @@
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
         <DebugType>portable</DebugType>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)'=='Release'">
+        <DebugSymbols>False</DebugSymbols>
+        <DebugType>None</DebugType>
     </PropertyGroup>
 
     <!--Default all references to CopyLocal False.-->
@@ -36,7 +54,7 @@
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-        <OutputPath>$(SolutionDir)release</OutputPath>
+        <OutputPath>$(SolutionDir)release\$(MSBuildProjectName)</OutputPath>
     </PropertyGroup>
 
     <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
