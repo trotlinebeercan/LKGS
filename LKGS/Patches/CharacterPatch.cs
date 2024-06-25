@@ -1,4 +1,4 @@
-using BepInEx.Configuration;
+using HL = HarmonyLib;
 
 namespace LKGS;
 
@@ -36,30 +36,31 @@ public class CharacterPatch : IPatch
 
     private void AdjustStatImpl(PlayerStat statToAdjust, ref float amount)
     {
+        // should be simple - just set the incoming decrement amount to 0 for no-op
         if (statToAdjust == PlayerStat.Energy)
             amount = ConfigManager.Instance.GetValue<bool>(bEnableInfiniteEnergyId) ? 0.0f : amount;
         if (statToAdjust == PlayerStat.Health)
             amount = ConfigManager.Instance.GetValue<bool>(bEnableInfiniteHealthId) ? 0.0f : amount;
     }
 
-    [HarmonyLib.HarmonyPatch(typeof(ScPlayerStats), nameof(ScPlayerStats.ExhaustedPenalty))]
-    [HarmonyLib.HarmonyPrefix]
+    [HL.HarmonyPatch(typeof(ScPlayerStats), nameof(ScPlayerStats.ExhaustedPenalty))]
+    [HL.HarmonyPrefix]
     public static bool ExhaustedPenalty()
     {
         // don't let the exhausted penalty be set if we're Preventing penalties
         return !Plugin.GetStoredPatch<CharacterPatch>().PreventPenalties();
     }
 
-    [HarmonyLib.HarmonyPatch(typeof(ScPlayerStats), nameof(ScPlayerStats.LateNightPenalty))]
-    [HarmonyLib.HarmonyPrefix]
+    [HL.HarmonyPatch(typeof(ScPlayerStats), nameof(ScPlayerStats.LateNightPenalty))]
+    [HL.HarmonyPrefix]
     public static bool LateNightPenalty()
     {
         // don't let the late night penalty be set if we're Preventing penalties
         return !Plugin.GetStoredPatch<CharacterPatch>().PreventPenalties();
     }
 
-    [HarmonyLib.HarmonyPatch(typeof(ScPlayerStats), nameof(ScPlayerStats.AdjustStat))]
-    [HarmonyLib.HarmonyPrefix]
+    [HL.HarmonyPatch(typeof(ScPlayerStats), nameof(ScPlayerStats.AdjustStat))]
+    [HL.HarmonyPrefix]
     public static void AdjustStat(PlayerStat statToAdjust, ref float amount)
     {
         Plugin.GetStoredPatch<CharacterPatch>().AdjustStatImpl(statToAdjust, ref amount);
