@@ -25,7 +25,7 @@ public class UIPatch : UE.MonoBehaviour, IPatch
             .Create(kOpenGameDebugMenuId, "Game Debug Menu", new BC.KeyboardShortcut(UE.KeyCode.F5),
                 "Oooo special dev debug menu.",
                 null,
-                new ConfigurationManagerAttributes {}
+                new ConfigurationManagerAttributes { IsAdvanced = true }
             )
         .EndSection("Fun UI Hacks");
     }
