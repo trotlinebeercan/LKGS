@@ -42,6 +42,7 @@ public class Plugin : BepInEx.BaseUnityPlugin
         // allocate plugins
         CreateAndStorePatch<TimePatch>();
         CreateAndStorePatch<CharacterPatch>();
+        CreateAndStorePatch<UIPatch>();
 
         // disabling this for now, until I can figure out what is going on
         CreateAndStorePatch<ClockPatch>();
