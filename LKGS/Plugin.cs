@@ -19,16 +19,10 @@ public class Plugin : BepInEx.BaseUnityPlugin
 
     private void Awake()
     {
-        Logger.LogInfo($"Hello world, from {PluginInfo.kTitle}!");
+        Logger.LogInfo($"Hello world, from {PluginInfo.kTitle} {PluginInfo.kVersion}!");
 
         // set the global logger
         kLog = Logger;
-
-#if false // enable to delete the config file and force defaults (for testing)
-        File.Delete(Config.ConfigFilePath);
-        Config.Do(kvp => kvp.Value.BoxedValue = kvp.Value.DefaultValue);
-        Config.Save();
-#endif
 
         // initialize lazy config manager
         ConfigManager.Instance.Initialize(Config);
