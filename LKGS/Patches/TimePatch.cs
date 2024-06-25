@@ -31,7 +31,7 @@ public class TimePatch : BasePatch
         fGameSecPerRealSec = fGameFpsTarget / fDefaultRealMinPerGameHr;
     }
 
-    public override void OnTriggerUpdate()
+    public void OnTriggerUpdate()
     {
         // initially set the values back to default
         SetAllPatchedValuesToDefaultValues();
@@ -47,7 +47,7 @@ public class TimePatch : BasePatch
         UpdateTimeManager();
     }
 
-    public override void Initialize()
+    public void Initialize()
     {
         SetAllPatchedValuesToDefaultValues();
 

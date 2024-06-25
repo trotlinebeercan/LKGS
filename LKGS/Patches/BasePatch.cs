@@ -1,6 +1,6 @@
 namespace LKGS;
 
-public abstract class BasePatch : UnityEngine.MonoBehaviour
+public interface BasePatch
 {
     public abstract void Initialize();
     public virtual void OnTriggerUpdate() {}

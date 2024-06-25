@@ -7,12 +7,12 @@ namespace LKGS;
 // NOTE: this does not work as expected... weird things happen
 //       do not try this at home (or do, idgaf)
 
-public class ClockPatch : BasePatch
+public class ClockPatch : UE.MonoBehaviour, BasePatch
 {
     private string bPauseClockAction = "bPauseClockAction";
     private bool bPauseClock = false;
 
-    public override void OnTriggerUpdate()
+    public void OnTriggerUpdate()
     {
         // don't try to access something that does not exist
         var timeManager = ScGameManager.Instance?.GetTimeManager();
@@ -36,13 +36,13 @@ public class ClockPatch : BasePatch
         }
     }
 
-    public override void OnActiveSceneChanged()
+    public void OnActiveSceneChanged()
     {
         //Plugin.D("lol");
         //kConfigManager.Get<BC.KeyboardShortcut>(bPauseClockAction);
     }
 
-    public override void Initialize()
+    public void Initialize()
     {
         ConfigManager.Instance.StartSection("Clock Management")
             .Create(bPauseClockAction, "Pause Clock", new BC.KeyboardShortcut(UE.KeyCode.F2),

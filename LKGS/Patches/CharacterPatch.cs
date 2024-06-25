@@ -4,12 +4,12 @@ namespace LKGS;
 
 public class CharacterPatch : BasePatch
 {
-    public override void Initialize()
+    public void Initialize()
     {
         // throw new System.NotImplementedException();
     }
 
-    public override void OnTriggerUpdate()
+    public void OnTriggerUpdate()
     {
         // throw new System.NotImplementedException();
     }

@@ -49,13 +49,12 @@ public class Plugin : BepInEx.BaseUnityPlugin
     private void CreateAndStorePatch<T>() where T : BasePatch, new()
     {
         bool isUnityObject = typeof(T).IsSubclassOf(typeof(UnityEngine.MonoBehaviour));
-
-        D($"Creating Patch {typeof(T)} - isUnityObject={isUnityObject}");
-
-        T patch = isUnityObject ? (T)gameObject.AddComponent(typeof(T)) : new();
+        T patch = isUnityObject ? (T)(object)gameObject.AddComponent(typeof(T)) : new();
         patch.Initialize();
         kHarmony?.PatchAll(typeof(T));
         kAllPatches.Add(patch);
+
+         D($"Created {typeof(T)} - isUnityObject={isUnityObject}");
     }
 
     public static T GetStoredPatch<T>()
