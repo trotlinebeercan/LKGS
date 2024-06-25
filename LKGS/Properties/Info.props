@@ -3,7 +3,7 @@
         <Product>LKGS</Product>
         <Authors>trotlinebeercan</Authors>
         <Company>trotlinebeercan</Company>
-        <Copyright>Copyright &#169; $([System.DateTime]::Now.Year)</Copyright>
+        <Copyright>Copyright &#169; $([System.DateTime]::Now.Year) trotlinebeercan</Copyright>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <ProjectDirectoryName>$([System.IO.Path]::GetFileName($(MSBuildProjectDirectory)))</ProjectDirectoryName>
