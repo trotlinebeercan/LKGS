@@ -1,7 +1,7 @@
 using HL = HarmonyLib;
 namespace LKGS;
 
-public class TimePatch : BasePatch
+public class TimePatch : IPatch
 {
     private string bClockSlowDownEnableId = "bClockSlowDownEnable";
     private string iClockSlowDownMultiplier = "iClockSlowDownMultiplier";

@@ -1,6 +1,6 @@
 namespace LKGS;
 
-public interface BasePatch
+public interface IPatch
 {
     public abstract void Initialize();
     public virtual void OnTriggerUpdate() {}

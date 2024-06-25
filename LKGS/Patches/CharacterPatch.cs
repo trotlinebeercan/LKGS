@@ -2,7 +2,7 @@ using BepInEx.Configuration;
 
 namespace LKGS;
 
-public class CharacterPatch : BasePatch
+public class CharacterPatch : IPatch
 {
     public void Initialize()
     {

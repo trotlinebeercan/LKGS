@@ -7,7 +7,7 @@ namespace LKGS;
 // NOTE: this does not work as expected... weird things happen
 //       do not try this at home (or do, idgaf)
 
-public class ClockPatch : UE.MonoBehaviour, BasePatch
+public class ClockPatch : UE.MonoBehaviour, IPatch
 {
     private string bPauseClockAction = "bPauseClockAction";
     private bool bPauseClock = false;

@@ -14,7 +14,7 @@ public class Plugin : BepInEx.BaseUnityPlugin
 {
     protected static BepInEx.Logging.ManualLogSource kLog { get; private set; }
     protected static HL.Harmony kHarmony { get; private set; }
-    protected static List<BasePatch> kAllPatches = new();
+    protected static List<IPatch> kAllPatches = new();
 
     private void Awake()
     {
@@ -46,7 +46,7 @@ public class Plugin : BepInEx.BaseUnityPlugin
         kAllPatches.ForEach(p => p.OnActiveSceneChanged());
     }
 
-    private void CreateAndStorePatch<T>() where T : BasePatch, new()
+    private void CreateAndStorePatch<T>() where T : IPatch, new()
     {
         bool isUnityObject = typeof(T).IsSubclassOf(typeof(UnityEngine.MonoBehaviour));
         T patch = isUnityObject ? (T)(object)gameObject.AddComponent(typeof(T)) : new();
