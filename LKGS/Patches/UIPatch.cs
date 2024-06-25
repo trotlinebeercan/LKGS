@@ -12,17 +12,17 @@ public class UIPatch : UE.MonoBehaviour, IPatch
     public void Initialize()
     {
         ConfigManager.Instance.StartSection("Fun UI Hacks")
-            .Create(kOpenWorkbenchWindowId, "Open Workbench", new BC.KeyboardShortcut(UE.KeyCode.F3),
+            .Create(kOpenWorkbenchWindowId, "Open Workbench", new BC.KeyboardShortcut(UE.KeyCode.None),
                 "Opens the workbench from anywhere.",
                 null,
                 new ConfigurationManagerAttributes {}
             )
-            .Create(kOpenKitchenWindowId, "Open Kitchen", new BC.KeyboardShortcut(UE.KeyCode.F4),
+            .Create(kOpenKitchenWindowId, "Open Kitchen", new BC.KeyboardShortcut(UE.KeyCode.None),
                 "Opens the kitchen from anywhere.",
                 null,
                 new ConfigurationManagerAttributes {}
             )
-            .Create(kOpenGameDebugMenuId, "Game Debug Menu", new BC.KeyboardShortcut(UE.KeyCode.F5),
+            .Create(kOpenGameDebugMenuId, "Game Debug Menu", new BC.KeyboardShortcut(UE.KeyCode.None),
                 "Oooo special dev debug menu.",
                 null,
                 new ConfigurationManagerAttributes { IsAdvanced = true }
