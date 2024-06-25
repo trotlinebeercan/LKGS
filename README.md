@@ -2,7 +2,7 @@
 
 # Little-Known Galaxy - Instant Subliminal Learning (LKGS Mod)
 
-This repo holds an all-in-one mod for [Little-Known Galaxy](https://store.steampowered.com/app/2521600/LittleKnown_Galaxy/).
+This repo holds an all-in-one mod for [Little-Known Galaxy](https://linktr.ee/littleknowngalaxy).
 
 Current features include:
 - Increase time length of the day (slow the clock down)
