@@ -9,6 +9,8 @@ Current features include:
 - Pause the clock for the current location
 - Infinite Stamina
 - Infinite Health
+- Move around twice as fast
+- Tools Instantly Fully Charge
 - Open the Workbench and Kitchen for crafting from anywhere
 - Open the in-game development debug menu for l33t h4x1ng
 
@@ -40,4 +42,4 @@ You should find the mod installed under `SteamLibrary\steamapps\common\Little-Kn
 
 Follow the terms of the [MIT License](https://opensource.org/licenses/MIT) and have fun!
 
-<sub><sup>this file greatly inspired by [Maverik](https://github.com/Maverik)</sup></sub>
+<sub><sup>this readme was greatly inspired by [Maverik](https://github.com/Maverik)</sup></sub>
