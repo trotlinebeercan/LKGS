@@ -9,7 +9,8 @@ namespace LKGS;
 
 public class ClockPatch : UE.MonoBehaviour, IPatch
 {
-    private string bPauseClockAction = "bPauseClockAction";
+    private string bEnablePauseClockToggleId = "bEnablePauseClockToggle";
+    private string kPauseClockActionId = "kPauseClockAction";
     private bool bPauseClock = false;
 
     public void OnTriggerUpdate()
@@ -28,27 +29,26 @@ public class ClockPatch : UE.MonoBehaviour, IPatch
 
     private void Update()
     {
-        if (ConfigManager.Instance.GetValue<BC.KeyboardShortcut>(bPauseClockAction).IsDown())
+        if (ConfigManager.Instance.GetValue<bool>(bEnablePauseClockToggleId) &&
+            ConfigManager.Instance.GetValue<BC.KeyboardShortcut>(kPauseClockActionId).IsDown())
         {
-            Plugin.D("Update detected keyboard shortcut hit");
             bPauseClock = !bPauseClock;
             OnTriggerUpdate();
         }
     }
 
-    public void OnActiveSceneChanged()
-    {
-        //Plugin.D("lol");
-        //kConfigManager.Get<BC.KeyboardShortcut>(bPauseClockAction);
-    }
-
     public void Initialize()
     {
         ConfigManager.Instance.StartSection("Clock Management")
-            .Create(bPauseClockAction, "Pause Clock", new BC.KeyboardShortcut(UE.KeyCode.F2),
-                "Pause the clock completely. Time will not pass. Resets when you enter/leave a room.",
+            .Create(bEnablePauseClockToggleId, "Allow Pause Clock", false,
+                "Allow the clock to be paused.",
                 null,
-                new ConfigurationManagerAttributes {IsAdvanced = true}
+                new ConfigurationManagerAttributes{}
+            )
+            .Create(kPauseClockActionId, "Pause Clock Shortcut", new BC.KeyboardShortcut(UE.KeyCode.F2),
+                "Pause the clock, time will not pass. Resets when you enter/leave a room.",
+                null,
+                new ConfigurationManagerAttributes {}
             )
         .EndSection("Clock Management");
     }
@@ -57,7 +57,7 @@ public class ClockPatch : UE.MonoBehaviour, IPatch
     [HL.HarmonyPrefix]
     public static void PauseClock(bool pause)
     {
+        // reset the state of the clock when the system changes it
         Plugin.GetStoredPatch<ClockPatch>().bPauseClock = pause;
-        //Plugin.GetStoredPatch<ClockPatch>().OnTriggerUpdate();
     }
 }
