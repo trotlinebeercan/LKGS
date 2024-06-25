@@ -1,5 +1,6 @@
 # project specific folders
 **/build/*
+**/release/*
 **/.vscode/*
 **/Downloads/*
 
