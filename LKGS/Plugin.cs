@@ -40,11 +40,9 @@ public class Plugin : BepInEx.BaseUnityPlugin
         SM.SceneManager.activeSceneChanged += ChangedActiveScene;
 
         // allocate plugins
-        CreateAndStorePatch<TimePatch>();
         CreateAndStorePatch<CharacterPatch>();
+        CreateAndStorePatch<TimePatch>();
         CreateAndStorePatch<UIPatch>();
-
-        // disabling this for now, until I can figure out what is going on
         CreateAndStorePatch<ClockPatch>();
     }
 
@@ -56,13 +54,19 @@ public class Plugin : BepInEx.BaseUnityPlugin
 
     private void CreateAndStorePatch<T>() where T : IPatch, new()
     {
+        // we don't need to add the patch as a game component if it doesn't
+        // require Unity hooks. we can still access Unity classes regardless
         bool isUnityObject = typeof(T).IsSubclassOf(typeof(UnityEngine.MonoBehaviour));
         T patch = isUnityObject ? (T)(object)gameObject.AddComponent(typeof(T)) : new();
+
+        // do all the inits
         patch.Initialize();
         kHarmony?.PatchAll(typeof(T));
+
+        // store locally for GetStoredPatch<>
         kAllPatches.Add(patch);
 
-         D($"Created {typeof(T)} - isUnityObject={isUnityObject}");
+        D($"Created {typeof(T)} - isUnityObject={isUnityObject}");
     }
 
     public static T GetStoredPatch<T>()
