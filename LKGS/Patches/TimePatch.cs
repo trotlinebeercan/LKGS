@@ -1,4 +1,5 @@
 using HL = HarmonyLib;
+
 namespace LKGS;
 
 public class TimePatch : IPatch
@@ -52,25 +53,27 @@ public class TimePatch : IPatch
         SetAllPatchedValuesToDefaultValues();
 
         ConfigManager.Instance.StartSection("Time Management")
-                .Create(bClockSlowDownEnableId, "Enable Clock Slowdown", false,
-                    "Slow the rate at which the clock moves forward.",
-                    null,
-                    new ConfigurationManagerAttributes {},
-                    (_, _) => { OnTriggerUpdate(); }
-                )
-                .Create(iClockSlowDownMultiplier, "Clock Speed Multiplier", 1,
-                    "Set the time multiplier, making the day 'N' times longer.",
-                    new BepInEx.Configuration.AcceptableValueRange<int>(2, 8),
-                    new ConfigurationManagerAttributes {ShowRangeAsPercent = false},
-                    (_, _) => { OnTriggerUpdate(); }
-                )
-            .EndSection("Time Management");
+            .Create(bClockSlowDownEnableId, "Enable Clock Slowdown", false,
+                "Slow the rate at which the clock moves forward.",
+                null,
+                new ConfigurationManagerAttributes {},
+                (_, _) => { OnTriggerUpdate(); }
+            )
+            .Create(iClockSlowDownMultiplier, "Clock Speed Multiplier", 1,
+                "Set the time multiplier, making the day 'N' times longer.",
+                new BepInEx.Configuration.AcceptableValueRange<int>(2, 8),
+                new ConfigurationManagerAttributes {ShowRangeAsPercent = false},
+                (_, _) => { OnTriggerUpdate(); }
+            )
+        .EndSection("Time Management");
     }
 
     [HL.HarmonyPatch(typeof(ScTime), nameof(ScTime.SetUpManager))]
     [HL.HarmonyPrefix]
     public static void SetUpManager()
     {
+        // this prefix ensures the variables will always have our values
+        // if something else modifies them after we do
         Plugin.GetStoredPatch<TimePatch>().OnTriggerUpdate();
     }
 }
