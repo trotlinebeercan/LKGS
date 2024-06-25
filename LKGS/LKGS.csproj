@@ -2,7 +2,7 @@
     <PropertyGroup>
         <Title>LKGS</Title>
         <Description>Little-Known Galaxy | Instant Subliminal Learner</Description>
-        <Version>0.2.0</Version>
+        <Version>0.2.4</Version>
         <PackageId>com.trotlinebeercan.lkgs</PackageId>
     </PropertyGroup>
 </Project>
