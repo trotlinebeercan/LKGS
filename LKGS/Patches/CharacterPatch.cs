@@ -7,6 +7,11 @@ public class CharacterPatch : IPatch
     private string bEnableInfiniteEnergyId = "bEnableInfiniteEnergy";
     private string bEnableInfiniteHealthId = "bEnableInfiniteHealth";
     private string bPreventNextDayPenaltiesId = "bPreventNextDayPenalties";
+    private string bEnableDoubleMovementSpeedId = "bEnableDoubleMovementSpeed";
+    private string bEnableFullyChargeToolsId = "bEnableFullyChargedTools";
+
+    // defaults: walk=2 run=5.5 planet=5.3
+    private const float fDefaultRunSpeed = 5.5f;
 
     public void Initialize()
     {
@@ -26,6 +31,16 @@ public class CharacterPatch : IPatch
                 null,
                 new ConfigurationManagerAttributes {}
             )
+            .Create(bEnableDoubleMovementSpeedId, "Double Movement Speed", false,
+                "Increases the speed of all forms of movement by 2x.",
+                null,
+                new ConfigurationManagerAttributes{}
+            )
+            .Create(bEnableFullyChargeToolsId, "Tools Always Fully Charged", false,
+                "Makes all tools act as if they were fully charged, all the time.",
+                null,
+                new ConfigurationManagerAttributes{}
+            )
         .EndSection("Character Management");
     }
 
@@ -41,6 +56,31 @@ public class CharacterPatch : IPatch
             amount = ConfigManager.Instance.GetValue<bool>(bEnableInfiniteEnergyId) ? 0.0f : amount;
         if (statToAdjust == PlayerStat.Health)
             amount = ConfigManager.Instance.GetValue<bool>(bEnableInfiniteHealthId) ? 0.0f : amount;
+    }
+
+    private void AdjustMovementSpeed()
+    {
+        var pc = ScGameManager.Instance?.GetPlayerController();
+        if (pc != null)
+        {
+            bool enabled = ConfigManager.Instance.GetValue<bool>(bEnableDoubleMovementSpeedId);
+            if (enabled)
+            {
+                pc.speed = fDefaultRunSpeed * 2f;
+            }
+        }
+    }
+
+    private void SetChargeDurationToNothing()
+    {
+        var pc = ScGameManager.Instance?.GetPlayerController();
+        if (pc != null)
+        {
+            if (ConfigManager.Instance.GetValue<bool>(bEnableFullyChargeToolsId))
+            {
+                pc.secondsToCharge = 0.03f;
+            }
+        }
     }
 
     [HL.HarmonyPatch(typeof(ScPlayerStats), nameof(ScPlayerStats.ExhaustedPenalty))]
@@ -64,5 +104,23 @@ public class CharacterPatch : IPatch
     public static void AdjustStat(PlayerStat statToAdjust, ref float amount)
     {
         Plugin.GetStoredPatch<CharacterPatch>().AdjustStatImpl(statToAdjust, ref amount);
+    }
+
+    [HL.HarmonyPatch(typeof(ScCharacter), nameof(ScCharacter.Move))]
+    [HL.HarmonyPrefix]
+    public static void Move(ScCharacter __instance)
+    {
+        // we only want this to happen for the player, not all NPCs
+        if (__instance == ScGameManager.Instance?.GetPlayerController())
+        {
+            Plugin.GetStoredPatch<CharacterPatch>().AdjustMovementSpeed();
+        }
+    }
+
+    [HL.HarmonyPatch(typeof(ScPlayerController), nameof(ScPlayerController.SetChargeDuration))]
+    [HL.HarmonyPostfix]
+    public static void SetChargeDuration(ScPlayerController __instance)
+    {
+        Plugin.GetStoredPatch<CharacterPatch>().SetChargeDurationToNothing();
     }
 }
