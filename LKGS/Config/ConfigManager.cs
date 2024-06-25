@@ -8,9 +8,8 @@ namespace LKGS;
 public class ConfigManager : SingletonBase<ConfigManager>
 {
     protected Dictionary<string, BC.ConfigDefinition> Entries { get; } = new Dictionary<string, BC.ConfigDefinition>();
-
+    private int iCurrentOrderIndex = 100;
     private string sCurrentSection = "";
-
     private BC.ConfigFile Config;
     public void Initialize(BC.ConfigFile config)
     {
@@ -43,7 +42,7 @@ public class ConfigManager : SingletonBase<ConfigManager>
         Entries.Add(uuid, newConfDef);
 
         // order them in the same order they are initialized
-        tags.Order = Config.Count;
+        tags.Order = --iCurrentOrderIndex;
         tags.DispName = text;
 
         BC.ConfigDescription newConfDesc = new BC.ConfigDescription(description, acceptableValues, tags);
