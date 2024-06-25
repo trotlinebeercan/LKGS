@@ -6,7 +6,7 @@ public class CharacterPatch : IPatch
 {
     private string bEnableInfiniteEnergyId = "bEnableInfiniteEnergy";
     private string bEnableInfiniteHealthId = "bEnableInfiniteHealth";
-    private string bAllowNextDayPenaltiesId = "bAllowNextDayPenalties";
+    private string bPreventNextDayPenaltiesId = "bPreventNextDayPenalties";
 
     public void Initialize()
     {
@@ -21,7 +21,7 @@ public class CharacterPatch : IPatch
                 null,
                 new ConfigurationManagerAttributes {}
             )
-            .Create(bAllowNextDayPenaltiesId, "Allow Next Day Penalties", true,
+            .Create(bPreventNextDayPenaltiesId, "Prevent Next Day Penalties", false,
                 "Staying up too late or depleting all Energy will cause a penalty on the next day.",
                 null,
                 new ConfigurationManagerAttributes {}
@@ -29,9 +29,9 @@ public class CharacterPatch : IPatch
         .EndSection("Character Management");
     }
 
-    private bool AllowPenalties()
+    private bool PreventPenalties()
     {
-        return ConfigManager.Instance.GetValue<bool>(bAllowNextDayPenaltiesId);
+        return ConfigManager.Instance.GetValue<bool>(bPreventNextDayPenaltiesId);
     }
 
     private void AdjustStatImpl(PlayerStat statToAdjust, ref float amount)
@@ -46,16 +46,16 @@ public class CharacterPatch : IPatch
     [HarmonyLib.HarmonyPrefix]
     public static bool ExhaustedPenalty()
     {
-        // don't let the exhausted penalty be set if we're allowing penalties
-        return Plugin.GetStoredPatch<CharacterPatch>().AllowPenalties();
+        // don't let the exhausted penalty be set if we're Preventing penalties
+        return !Plugin.GetStoredPatch<CharacterPatch>().PreventPenalties();
     }
 
     [HarmonyLib.HarmonyPatch(typeof(ScPlayerStats), nameof(ScPlayerStats.LateNightPenalty))]
     [HarmonyLib.HarmonyPrefix]
     public static bool LateNightPenalty()
     {
-        // don't let the late night penalty be set if we're allowing penalties
-        return Plugin.GetStoredPatch<CharacterPatch>().AllowPenalties();
+        // don't let the late night penalty be set if we're Preventing penalties
+        return !Plugin.GetStoredPatch<CharacterPatch>().PreventPenalties();
     }
 
     [HarmonyLib.HarmonyPatch(typeof(ScPlayerStats), nameof(ScPlayerStats.AdjustStat))]
