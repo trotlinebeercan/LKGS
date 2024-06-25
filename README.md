@@ -39,3 +39,5 @@ You should find the mod installed under `SteamLibrary\steamapps\common\Little-Kn
 ### License & Attribution
 
 Follow the terms of the [MIT License](https://opensource.org/licenses/MIT) and have fun!
+
+<sub><sup>this file greatly inspired by [Maverik](https://github.com/Maverik)</sup></sub>
