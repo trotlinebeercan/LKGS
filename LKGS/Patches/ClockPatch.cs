@@ -6,7 +6,6 @@ namespace LKGS;
 
 public class ClockPatch : UE.MonoBehaviour, IPatch
 {
-    private string bEnablePauseClockToggleId = "bEnablePauseClockToggle";
     private string kPauseClockActionId = "kPauseClockAction";
     private bool bPauseClock = false;
 
@@ -26,8 +25,7 @@ public class ClockPatch : UE.MonoBehaviour, IPatch
 
     private void Update()
     {
-        if (ConfigManager.Instance.GetValue<bool>(bEnablePauseClockToggleId) &&
-            ConfigManager.Instance.GetValue<BC.KeyboardShortcut>(kPauseClockActionId).IsDown())
+        if (ConfigManager.Instance.GetValue<BC.KeyboardShortcut>(kPauseClockActionId).IsDown())
         {
             // invert what we think the clock state currently is
             bPauseClock = !bPauseClock;
@@ -38,12 +36,7 @@ public class ClockPatch : UE.MonoBehaviour, IPatch
     public void Initialize()
     {
         ConfigManager.Instance.StartSection("Clock Management")
-            .Create(bEnablePauseClockToggleId, "Allow Pause Clock", false,
-                "Allow the clock to be paused.",
-                null,
-                new ConfigurationManagerAttributes{}
-            )
-            .Create(kPauseClockActionId, "Pause Clock Shortcut", new BC.KeyboardShortcut(UE.KeyCode.F2),
+            .Create(kPauseClockActionId, "Pause Clock Shortcut", new BC.KeyboardShortcut(UE.KeyCode.None),
                 "Pause the clock, time will not pass. Resets when you enter/leave a room.",
                 null,
                 new ConfigurationManagerAttributes {}
