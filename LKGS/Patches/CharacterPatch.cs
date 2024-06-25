@@ -16,7 +16,7 @@ public class CharacterPatch : IPatch
                 null,
                 new ConfigurationManagerAttributes {}
             )
-            .Create(bEnableInfiniteEnergyId, "Infinite Health", false,
+            .Create(bEnableInfiniteHealthId, "Infinite Health", false,
                 "Prevents Health depletion when taking any damage.",
                 null,
                 new ConfigurationManagerAttributes {}
