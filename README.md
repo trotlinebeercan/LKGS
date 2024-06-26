@@ -14,7 +14,9 @@ Current features include:
 - Open the Workbench and Kitchen for crafting from anywhere
 - Open the in-game development debug menu for l33t h4x1ng
 
-### Prerequisite
+## Installation
+
+### BepInEx
 
 This is a [BepInEx 5](https://github.com/BepInEx/BepInEx) mod and as such requires that you have BepInEx 5 installed and working properly. If you've not done that yet, please go to their [documentation](https://docs.bepinex.dev/articles/user_guide/installation/index.html) on how to get it installed. 
 
@@ -22,15 +24,15 @@ You want the Stable (5.x - 5.4.21 LTS at the time of writing) **MONO** build whe
 
 If you already know how to get BepInEx working, head over to their [Releases](https://github.com/BepInEx/BepInEx/releases) to grab the latest copy.
 
-### Recommended
-
-LKGS supports configuration through [BepInEx Configuration Manager](https://github.com/BepInEx/BepInEx.ConfigurationManager). I'd recommend it for easier configuration of this mod.
-
-### Mod Installation
+### Installation
 
 Head over to [Releases](https://github.com/trotlinebeercan/LKGS/releases), download the latest, and extract the archive into your BepInEx plugins folder in the game root.
 
 If everything is done correctly, you should see the mod installed under `SteamLibrary\steamapps\common\Little-Known Galaxy\BepInEx\plugins\LKGS`.
+
+## Recommended
+
+LKGS supports configuration through [BepInEx Configuration Manager](https://github.com/BepInEx/BepInEx.ConfigurationManager). I'd recommend it for easier configuration of this mod.
 
 ### Building from Source
 
