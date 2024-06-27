@@ -31,9 +31,9 @@
         <WriteLinesToFile Lines="$(_GeneratedManifestText)" File="$(PackageOutputPath)\manifest.json" WriteOnlyWhenDifferent="true" Overwrite="true"/>
     </Target>
 
-    <Target Name="_CopyPluginIcons" AfterTargets="_GeneratePluginManifest" Outputs="$(PackageOutputPath)icon.png">
+    <Target Name="_CopyPluginIcons" AfterTargets="_GeneratePluginManifest" Outputs="$(PackageOutputPath)\logo.png">
         <PropertyGroup>
-            <PackageIcon Condition="Exists('$(ProjectDir)icon.png')">$(ProjectDir)icon.png</PackageIcon>
+            <PackageIcon Condition="Exists('$(SolutionDir)logo.png')">$(SolutionDir)logo.png</PackageIcon>
             <PackageIcon Condition="'$(PackageIcon)' == ''">$(DefaultPackageIcon)</PackageIcon>
         </PropertyGroup>
         <Copy SourceFiles="$(PackageIcon)" DestinationFolder="$(PackageOutputPath)"/>
