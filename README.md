@@ -16,34 +16,52 @@ Current features include:
 
 ## Installation
 
-### Step-by-step Instructions
+### BepInEx
+
+This is a [BepInEx 5](https://github.com/BepInEx/BepInEx) mod and as such requires that you have BepInEx 5 installed and working properly.
+If you already know how to get BepInEx working, head over to their [Releases](https://github.com/BepInEx/BepInEx/releases) to grab the latest copy.
+
+If not, you have two options:
+- Use the [Little-Known Galaxy BepInEx 5 Pack](https://www.nexusmods.com/littleknowngalaxy/mods/3) mod and extract the archive into the game directory.
+**or**
 - Download [BepInEx 5.4.22.0](https://github.com/BepInEx/BepInEx/releases/tag/v5.4.22) for your platform.
     - If you do not know, 99% chance it will be the [BepInEx_x64_5.4.22.0.zip](https://github.com/BepInEx/BepInEx/releases/download/v5.4.22/BepInEx_x64_5.4.22.0.zip) file.
 - Extract the ZIP archive in the installation directory for Little-Known Galaxy, next to `Little-Known Galaxy.exe`
     - If this worked, you should see a new folder named `BepInEx` and three new files, `winhttp.dll`, `doorstop_config.ini` and `.doorstop_version`.
+
+Be absolutely sure you extract the the contents where the game's exe is. If "winhttp.dll" and "doorstop_config.ini" aren't in the same folder as "Little-Known Galaxy.exe", it won't work.
+
+### Mod Files
+
 - Download the latest [LKGS release](https://github.com/trotlinebeercan/LKGS/releases).
-- Extract this ZIP archive into `BepInEx/plugins`.
-    - If this worked, you should see a new folder named `LKGS` in the plugins folder.
+- Extract this ZIP archive into `SteamLibrary\steamapps\common\Little-Known Galaxy\BepInEx\plugins`.
+    - If everything is done correctly, you should see the mod installed under `SteamLibrary\steamapps\common\Little-Known Galaxy\BepInEx\plugins\LKGS`.
 - Run the game once! You can close out of it at the main menu. This is to allow the mod to create the configuration files.
+
 - Here, you need to enable the patches you would like to have active. There are two ways:
+    - NOTE: If you installed the [Little-Known Galaxy BepInEx 5 Pack](https://www.nexusmods.com/littleknowngalaxy/mods/3), you do not need to download it. The pack has it preinstalled.
     - Download [BepInEx Configuration Manager](https://github.com/BepInEx/BepInEx.ConfigurationManager) and extract the archive into the `BepInEx/plugins` folder.
         - Hit F1 when the game is loaded and you should see the Configuration Manager UI. Click on LKGS and have fun.
     - Manually edit `BepInEx/config/com.trotlinebeercan.lkgs.cfg` with your favorite text editor. No shame in using Notepad!
 - Congrats! You should have LKGS installed and running.
 
-### BepInEx
-
-This is a [BepInEx 5](https://github.com/BepInEx/BepInEx) mod and as such requires that you have BepInEx 5 installed and working properly. If you've not done that yet, please go to their [documentation](https://docs.bepinex.dev/articles/user_guide/installation/index.html) on how to get it installed. 
-
-You want the Stable (5.x - 5.4.21 LTS at the time of writing) **MONO** build when you're presented with choices.
-
-If you already know how to get BepInEx working, head over to their [Releases](https://github.com/BepInEx/BepInEx/releases) to grab the latest copy.
-
-### Mod Files
-
 Head over to [Releases](https://github.com/trotlinebeercan/LKGS/releases), download the latest, and extract the archive into your BepInEx plugins folder in the game root.
 
 If everything is done correctly, you should see the mod installed under `SteamLibrary\steamapps\common\Little-Known Galaxy\BepInEx\plugins\LKGS`.
+
+### Running BepInEx 5 on SteamDeck
+
+- Enter Desktop Mode (press the Steam key, go down to Power, and select Switch to Desktop)
+- Download everything you need using the instructions above.
+- Back in Steam, navigate to the game page for Little-Known Galaxy in your Library.
+- Click on the gear icon on the right side, then Manage, then Browse Local Files.
+- Extract the archives downloaded previously here in this folder.
+- Back in Steam, click the gear icon again, and select Properties.
+- Under General, scroll down to Launch Options and input
+`WINEDLLOVERRIDES="winhttp=n,b" %command%`
+- Exit Properties, and run the game once.
+
+These instructions were copypasta'd from [this Steam Community post](https://steamcommunity.com/sharedfiles/filedetails/?id=3122526585). It is for a different game, but it'll work.
 
 ## Recommended
 
