@@ -38,6 +38,7 @@ public class Plugin : BepInEx.BaseUnityPlugin
         CreateAndStorePatch<TimePatch>();
         CreateAndStorePatch<UIPatch>();
         CreateAndStorePatch<ClockPatch>();
+        CreateAndStorePatch<TexturePatch>();
     }
 
     private void ChangedActiveScene(SM.Scene current, SM.Scene next)
@@ -69,5 +70,6 @@ public class Plugin : BepInEx.BaseUnityPlugin
     }
 
     internal static void L(string message) => kLog.LogInfo(message);
+    internal static void E(string message) => kLog.LogError(message);
     internal static void D(string message) => kLog.LogDebug(message);
 }

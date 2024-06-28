@@ -14,6 +14,12 @@
         <Reference Include="UnityEngine.CoreModule">
             <HintPath>$(LKGSteamRootDir)UnityEngine.CoreModule.dll</HintPath>
         </Reference>
+        <Reference Include="UnityEngine.ImageConversion">
+            <HintPath>$(LKGSteamRootDir)UnityEngine.ImageConversionModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UIElements">
+            <HintPath>$(LKGSteamRootDir)UnityEngine.UIElementsModule.dll</HintPath>
+        </Reference>
     </ItemGroup>
 
 </Project>
