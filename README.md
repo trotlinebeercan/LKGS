@@ -21,9 +21,11 @@ Current features include:
 This is a [BepInEx 5](https://github.com/BepInEx/BepInEx) mod and as such requires that you have BepInEx 5 installed and working properly.
 If you already know how to get BepInEx working, head over to their [Releases](https://github.com/BepInEx/BepInEx/releases) to grab the latest copy.
 
-If not, you have two options:
+To install BepInEx, you should:
 - Use the [Little-Known Galaxy BepInEx 5 Pack](https://www.nexusmods.com/littleknowngalaxy/mods/3) mod and extract the archive into the game directory.
-**or**
+
+**or, to install manually:**
+
 - Download [BepInEx 5.4.22.0](https://github.com/BepInEx/BepInEx/releases/tag/v5.4.22) for your platform.
     - If you do not know, 99% chance it will be the [BepInEx_x64_5.4.22.0.zip](https://github.com/BepInEx/BepInEx/releases/download/v5.4.22/BepInEx_x64_5.4.22.0.zip) file.
 - Extract the ZIP archive in the installation directory for Little-Known Galaxy, next to `Little-Known Galaxy.exe`
