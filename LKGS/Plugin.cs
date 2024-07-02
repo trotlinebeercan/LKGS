@@ -40,6 +40,14 @@ public class Plugin : BepInEx.BaseUnityPlugin
         CreateAndStorePatch<ClockPatch>();
     }
 
+    private void OnDestroy()
+    {
+        D($"Goodbye!");
+        kHarmony?.UnpatchSelf();
+        kAllPatches.ForEach(p => DestroyPatch(ref p));
+        kAllPatches.Clear();
+    }
+
     private void ChangedActiveScene(SM.Scene current, SM.Scene next)
     {
         D($"ChangedActiveScene | current={current.name}, next={next.name}");
@@ -61,6 +69,19 @@ public class Plugin : BepInEx.BaseUnityPlugin
         kAllPatches.Add(patch);
 
         D($"Created {typeof(T)} - isUnityObject={isUnityObject}");
+    }
+
+    private void DestroyPatch<T>(ref T patch) where T : IPatch
+    {
+        // we have to destroy the gameobject if it is one
+        bool isUnityObject = typeof(T).IsSubclassOf(typeof(UnityEngine.MonoBehaviour));
+        if (isUnityObject)
+        {
+            Destroy(patch as UnityEngine.GameObject);
+            return;
+        }
+
+        patch = default(T);
     }
 
     public static T GetStoredPatch<T>()
