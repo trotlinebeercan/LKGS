@@ -89,6 +89,8 @@ public class Plugin : BepInEx.BaseUnityPlugin
         return kAllPatches.OfType<T>().First();
     }
 
-    internal static void L(string message) => kLog.LogInfo(message);
+    internal static void L(string message) => kLog.LogMessage(message);
+    internal static void E(string message) => kLog.LogError(message);
+    internal static void W(string message) => kLog.LogWarning(message);
     internal static void D(string message) => kLog.LogDebug(message);
 }
