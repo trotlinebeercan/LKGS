@@ -9,6 +9,7 @@ public class CharacterPatch : IPatch
     private string bPreventNextDayPenaltiesId = "bPreventNextDayPenalties";
     private string bEnableDoubleMovementSpeedId = "bEnableDoubleMovementSpeed";
     private string bEnableFullyChargeToolsId = "bEnableFullyChargedTools";
+    private string bEnablePeacefulModeId = "bEnablePeacefulMode";
 
     // defaults: walk=2 run=5.5 planet=5.3
     private const float fDefaultRunSpeed = 5.5f;
@@ -41,13 +42,15 @@ public class CharacterPatch : IPatch
                 null,
                 new ConfigurationManagerAttributes{}
             )
+            .Create(bEnablePeacefulModeId, "Peaceful Mode", false,
+                "Prevents enemies from spawning.",
+                null,
+                new ConfigurationManagerAttributes{}
+            )
         .EndSection("Character Management");
     }
 
-    private bool PreventPenalties()
-    {
-        return ConfigManager.Instance.GetValue<bool>(bPreventNextDayPenaltiesId);
-    }
+    private bool PreventPenalties() => ConfigManager.Instance.GetValue<bool>(bPreventNextDayPenaltiesId);
 
     private void AdjustStatImpl(PlayerStat statToAdjust, ref float amount)
     {
@@ -122,5 +125,37 @@ public class CharacterPatch : IPatch
     public static void SetChargeDuration(ScPlayerController __instance)
     {
         Plugin.GetStoredPatch<CharacterPatch>().SetChargeDurationToNothing();
+    }
+
+    private bool PeacefulMode(ref int __result)
+    {
+        if (ConfigManager.Instance.GetValue<bool>(bEnablePeacefulModeId))
+        {
+            __result = 0;
+            return true;
+        }
+
+        return false;
+    }
+
+    [HL.HarmonyPatch(typeof(ScPlanetEnemyLevel), nameof(ScPlanetEnemyLevel.GetNumEasyEnemies))]
+    [HL.HarmonyPrefix]
+    public static bool GetNumEasyEnemies(ref int __result)
+    {
+        return !Plugin.GetStoredPatch<CharacterPatch>().PeacefulMode(ref __result);
+    }
+
+    [HL.HarmonyPatch(typeof(ScPlanetEnemyLevel), nameof(ScPlanetEnemyLevel.GetNumHardEnemies))]
+    [HL.HarmonyPrefix]
+    public static bool GetNumHardEnemies(ref int __result)
+    {
+        return !Plugin.GetStoredPatch<CharacterPatch>().PeacefulMode(ref __result);
+    }
+
+    [HL.HarmonyPatch(typeof(ScPlanetEnemyLevel), nameof(ScPlanetEnemyLevel.GetNumSpecialEnemies))]
+    [HL.HarmonyPrefix]
+    public static bool GetNumSpecialEnemies(ref int __result)
+    {
+        return !Plugin.GetStoredPatch<CharacterPatch>().PeacefulMode(ref __result);
     }
 }
