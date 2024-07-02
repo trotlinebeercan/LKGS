@@ -1,5 +1,9 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
+        <LKGSteamRootDir Condition="'$(LKGSteamRootDir)' == ''">D:\SteamLibrary\steamapps\common\Little-Known Galaxy\</LKGSteamRootDir>
+    </PropertyGroup>
+
+    <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <LangVersion>latest</LangVersion>
@@ -49,11 +53,13 @@
         </PackageReference>
     </ItemDefinitionGroup>
 
-    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-        <OutputPath>D:\SteamLibrary\steamapps\common\Little-Known Galaxy\BepInEx\plugins\$(MSBuildProjectName)</OutputPath>
+    <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+        <!-- ScriptEngine expects debug plugins to be in the \scripts folder, so lets placate -->
+        <OutputPath Condition="Exists('$(LKGSteamRootDir)BepInEx\plugins\ScriptEngine.dll')">$(LKGSteamRootDir)BepInEx\scripts\</OutputPath>
+        <OutputPath Condition="'$(OutputPath)' == ''">$(LKGSteamRootDir)BepInEx\plugins\$(MSBuildProjectName)</OutputPath>
     </PropertyGroup>
 
-    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <PropertyGroup Condition="'$(Configuration)' == 'Release'">
         <OutputPath>$(SolutionDir)release\stage\$(MSBuildProjectName)</OutputPath>
     </PropertyGroup>
 

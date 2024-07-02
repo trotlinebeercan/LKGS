@@ -1,19 +1,13 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-
-    <PropertyGroup>
-        <LKGSteamRootDir Condition="'$(LKGSteamRootDir)' == ''">D:\SteamLibrary\steamapps\common\Little-Known Galaxy\Little-Known Galaxy_Data\Managed\</LKGSteamRootDir>
-    </PropertyGroup>
-
     <ItemGroup>
         <Reference Include="Assembly-CSharp" publicize="true">
-            <HintPath>$(LKGSteamRootDir)Assembly-CSharp.dll</HintPath>
+            <HintPath>$(LKGSteamRootDir)Little-Known Galaxy_Data\Managed\Assembly-CSharp.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine">
-            <HintPath>$(LKGSteamRootDir)UnityEngine.dll</HintPath>
+            <HintPath>$(LKGSteamRootDir)Little-Known Galaxy_Data\Managed\UnityEngine.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.CoreModule">
-            <HintPath>$(LKGSteamRootDir)UnityEngine.CoreModule.dll</HintPath>
+            <HintPath>$(LKGSteamRootDir)Little-Known Galaxy_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
         </Reference>
     </ItemGroup>
-
 </Project>
