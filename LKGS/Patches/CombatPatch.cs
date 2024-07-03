@@ -51,7 +51,7 @@ public class CombatPatch : IPatch
         if (combatDif == CombatDifficulty.Peaceful)
         {
             // set all to zero if peaceful
-            input.easyEnemies = input.hardEnemies = input.specialtyEnemies = ScIntRangeExt.Zero.ScIntRange;
+            input.easyEnemies = input.hardEnemies = input.specialtyEnemies = new ScIntRange(0, 0);
             Plugin.D($"[ApplyNewEnemyLevelForDifficulty] - Peaceful mode enabled: {input.ToDebugString()}");
         }
         else if (combatDif == CombatDifficulty.Easy)
