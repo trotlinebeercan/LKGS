@@ -35,13 +35,13 @@ public class ClockPatch : UE.MonoBehaviour, IPatch
 
     public void Initialize()
     {
-        ConfigManager.Instance.StartSection("Clock Management")
+        ConfigManager.Instance.StartSection("Time Management")
             .Create(kPauseClockActionId, "Pause Clock Shortcut", new BC.KeyboardShortcut(UE.KeyCode.None),
                 "Pause the clock, time will not pass. Resets when you enter/leave a room.",
                 null,
                 new ConfigurationManagerAttributes {}
             )
-        .EndSection("Clock Management");
+        .EndSection("Time Management");
     }
 
     [HL.HarmonyPatch(typeof(ScTime), nameof(ScTime.PauseClock))]
