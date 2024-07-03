@@ -35,6 +35,7 @@ public class Plugin : BepInEx.BaseUnityPlugin
 
         // allocate plugins
         CreateAndStorePatch<CharacterPatch>();
+        CreateAndStorePatch<CombatPatch>();
         CreateAndStorePatch<TimePatch>();
         CreateAndStorePatch<UIPatch>();
         CreateAndStorePatch<ClockPatch>();
