@@ -51,7 +51,7 @@ public class Plugin : BepInEx.BaseUnityPlugin
 
     private void ChangedActiveScene(SM.Scene current, SM.Scene next)
     {
-        D($"ChangedActiveScene | current={current.name}, next={next.name}");
+        //D($"ChangedActiveScene | current={current.name}, next={next.name}");
         kAllPatches.ForEach(p => p.OnActiveSceneChanged());
     }
 
