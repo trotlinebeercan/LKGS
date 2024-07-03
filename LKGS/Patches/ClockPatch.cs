@@ -4,6 +4,16 @@ using UE = UnityEngine;
 
 namespace LKGS;
 
+// logic here is:
+//    game calls PauseClock(bool) => we cache this
+//    when you trigger our update to pause the clock, we invert the cached state
+//    after, we call PauseClock(!bool), essentially
+//    we check if the cached value is equal to the stored value in ScTimeManager
+//    if so, we return and do nothing to prevent stack overflow via recursion
+//    I don't like this, ergo, it is marked as advanced and YMMV
+//
+// see: two lines above, ScTimeManager, ScTime
+
 public class ClockPatch : UE.MonoBehaviour, IPatch
 {
     private string kPauseClockActionId = "kPauseClockAction";

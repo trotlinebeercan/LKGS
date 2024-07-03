@@ -3,6 +3,14 @@ using UE = UnityEngine;
 
 namespace LKGS;
 
+// as straightforward as can be. you want a menu, we open the menu
+//
+// debug menu is marked as advanced because:
+// "I just hope if people start using that debug menu they realize it might not
+//  be 100% bug proof depending on how much they push my logic.😂" - Kay, 2024
+//
+// see: ScUIManager
+
 public class UIPatch : UE.MonoBehaviour, IPatch
 {
     private string kOpenWorkbenchWindowId = "kOpenWorkbenchWindow";

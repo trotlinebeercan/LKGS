@@ -2,6 +2,16 @@ using HL = HarmonyLib;
 
 namespace LKGS;
 
+// the game is capped at 60fps, so each frame update sets the "real minutes per in-game hour"
+// to be roughly 0.65, or 39sec per in-game hour, or 741 sec / 12.35min ber in-game hour.
+// each tick checks this delta time and increments the in-game clock by 15min intervals
+// using this precomputed ratio
+//
+// to adjust clock speed, we simply adjust the precomputed ratio via scalars.
+// want to make the game twice as slow? multiply the ratio by 2
+//
+// see: ScTimeManager, ScTime
+
 public class TimePatch : IPatch
 {
     private string bClockSlowDownEnableId = "bClockSlowDownEnable";

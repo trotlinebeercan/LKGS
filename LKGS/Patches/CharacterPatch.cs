@@ -2,6 +2,15 @@ using HL = HarmonyLib;
 
 namespace LKGS;
 
+// this is pretty straightforward. don't allow delta health/energy decrements,
+// don't ever return true for penalties, and toggle movement speed by 2x
+//
+// for tool charging, the game is capped at 60fps, so a frame tick of 0.03s
+// is required to prevent clipping and allow the animation cycle to actually
+// run and not attempt to operate on "frame data" that was "0 seconds"
+//
+// see: ScPlayerController, ScCharacter, ScPlayerStats
+
 public class CharacterPatch : IPatch
 {
     private string bEnableInfiniteEnergyId = "bEnableInfiniteEnergy";
