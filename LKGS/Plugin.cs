@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-
-using BC = BepInEx.Configuration;
 using HL = HarmonyLib;
 using SM = UnityEngine.SceneManagement;
 
