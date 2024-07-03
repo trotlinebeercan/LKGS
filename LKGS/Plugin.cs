@@ -44,7 +44,7 @@ public class Plugin : BepInEx.BaseUnityPlugin
     private void OnDestroy()
     {
         D($"Goodbye!");
-        kHarmony?.UnpatchSelf();
+        kHarmony.UnpatchSelf();
         kAllPatches.ForEach(p => DestroyPatch(ref p));
         kAllPatches.Clear();
     }
@@ -64,7 +64,7 @@ public class Plugin : BepInEx.BaseUnityPlugin
 
         // do all the inits
         patch.Initialize();
-        kHarmony?.PatchAll(typeof(T));
+        kHarmony.PatchAll(typeof(T));
 
         // store locally for GetStoredPatch<>
         kAllPatches.Add(patch);
