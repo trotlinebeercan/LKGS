@@ -9,5 +9,11 @@
         <Reference Include="UnityEngine.CoreModule">
             <HintPath>$(LKGSteamRootDir)Little-Known Galaxy_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
         </Reference>
+        <Reference Include="UnityEngine.UI">
+            <HintPath>$(LKGSteamRootDir)Little-Known Galaxy_Data\Managed\UnityEngine.UI.dll</HintPath>
+        </Reference>
+        <Reference Include="Unity.TextMeshPro">
+            <HintPath>$(LKGSteamRootDir)Little-Known Galaxy_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+        </Reference>
     </ItemGroup>
 </Project>

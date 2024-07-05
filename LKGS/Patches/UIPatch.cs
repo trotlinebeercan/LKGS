@@ -1,4 +1,7 @@
+using System;
+
 using BC = BepInEx.Configuration;
+using HL = HarmonyLib;
 using UE = UnityEngine;
 
 namespace LKGS;
@@ -9,13 +12,21 @@ namespace LKGS;
 // "I just hope if people start using that debug menu they realize it might not
 //  be 100% bug proof depending on how much they push my logic.😂" - Kay, 2024
 //
-// see: ScUIManager
+// camera zoom allows values outside of the default range
+// idk if it will break anything but /shrug
+//
+// see: ScUIManager, ScWndSettingsTabMain, ScWindowResize
 
 public class UIPatch : UE.MonoBehaviour, IPatch
 {
     private string kOpenWorkbenchWindowId = "kOpenWorkbenchWindow";
     private string kOpenKitchenWindowId = "kOpenKitchenWindow";
     private string kOpenGameDebugMenuId = "kOpenGameDebugMenu";
+
+    private const float fZoomDeltaScalar = 0.1f;
+    private const float fZoomMin = 0.4f;
+    private const float fZoomMax = 10f;
+    private float fZoomLevelOverride { get; set; }
 
     public void Initialize()
     {
@@ -52,5 +63,56 @@ public class UIPatch : UE.MonoBehaviour, IPatch
         {
             ScGameManager.Instance?.GetDebugManager().debugGameFunctions.RevealPanel();
         }
+    }
+
+    // click button -> IncreaseZoom -> ChangeZoom -> SetNewZoomLevel -> SetActiveZoomAmount
+
+    [HL.HarmonyPatch(typeof(ScWndSettingsTabMain), nameof(ScWndSettingsTabMain.IncreaseZoom))]
+    [HL.HarmonyPrefix]
+    private static bool IncreaseZoom_Prefix(ScWndSettingsTabMain __instance)
+    {
+        // overload the function to modify the increment amount
+        __instance.zoomLevel = (float)Math.Round(Math.Clamp(__instance.zoomLevel + fZoomDeltaScalar, fZoomMin, fZoomMax), 1);
+		__instance.ChangeZoom();
+        return false;
+    }
+
+    [HL.HarmonyPatch(typeof(ScWndSettingsTabMain), nameof(ScWndSettingsTabMain.DecreaseZoom))]
+    [HL.HarmonyPrefix]
+    private static bool DecreaseZoom_Prefix(ScWndSettingsTabMain __instance)
+    {
+        // overload the function to modify the decrement amount
+        __instance.zoomLevel = (float)Math.Round(Math.Clamp(__instance.zoomLevel - fZoomDeltaScalar, fZoomMin, fZoomMax), 1);
+		__instance.ChangeZoom();
+        return false;
+    }
+
+    [HL.HarmonyPatch(typeof(ScWndSettingsTabMain), nameof(ScWndSettingsTabMain.ChangeZoom))]
+    [HL.HarmonyPrefix]
+    private static bool ChangeZoom_Prefix(ScWndSettingsTabMain __instance)
+    {
+        // update our cached value
+        Plugin.GetStoredPatch<UIPatch>().fZoomLevelOverride = __instance.zoomLevel;
+
+        // run the necessary UI functions
+        __instance.windowResizeScript.SetNewZoomLevel(__instance.zoomLevel);
+        __instance.SetButtonState(__instance.btnZoomPlus, __instance.zoomLevel == fZoomMax);
+        __instance.SetButtonState(__instance.btnZoomMinus, __instance.zoomLevel == fZoomMin);
+
+        // show the overloaded zoom text in the UI
+        var worldZoomText = UE.GameObject.Find("Text_S_Zoom").GetComponent<ScTextUISetup>();
+        worldZoomText.textField.SetText($"World Zoom ({__instance.zoomLevel})");
+        return false;
+    }
+
+    [HL.HarmonyPatch(typeof(ScWindowResize), nameof(ScWindowResize.SetActiveZoomAmount))]
+    [HL.HarmonyPrefix]
+    private static bool SetActiveZoomAmount_Prefix(ScWindowResize __instance)
+    {
+        // overload the function to remove all logic and force set activeZoom
+        __instance.zoomLevel = Plugin.GetStoredPatch<UIPatch>().fZoomLevelOverride;
+        __instance.activeZoom = Plugin.GetStoredPatch<UIPatch>().fZoomLevelOverride;
+        Plugin.D($"[zoom] - level={__instance.zoomLevel} // active={__instance.activeZoom}");
+        return false;
     }
 }
