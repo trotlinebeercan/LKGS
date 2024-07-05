@@ -27,7 +27,10 @@ public class CombatPatch : IPatch
         Hard,
     }
 
+    private const int iCombatNumEnemiesSpawnMinDefault = 1;
+    private const int iCombatNumEnemiesSpawnMaxDefault = 9;
     private string eCombatDifficultyId = "eCombatDifficulty";
+
     private ScPlanetEnemyLevel CurrentSpawnCount = new();
 
     public void Initialize()
@@ -57,20 +60,37 @@ public class CombatPatch : IPatch
         else if (combatDif == CombatDifficulty.Easy)
         {
             // cap the maximum allowed and lower it by a factor if easy
-            // i.e. min1 = 0, max1 = ceil(max0 / 2)
+            // i.e. min1 = 0, max1 = floor(max0 / 1.5)
             input.easyEnemies.minimumNum = input.hardEnemies.minimumNum = input.specialtyEnemies.minimumNum = 0;
-            input.easyEnemies.maxiumNum = (int)Math.Ceiling(Convert.ToDouble(input.easyEnemies.maxiumNum) / 2.0);
-            input.hardEnemies.maxiumNum = (int)Math.Ceiling(Convert.ToDouble(input.hardEnemies.maxiumNum) / 2.0);
-            input.specialtyEnemies.maxiumNum = (int)Math.Ceiling(Convert.ToDouble(input.specialtyEnemies.maxiumNum) / 2.0);
+            input.easyEnemies.maxiumNum = (int)Math.Floor(input.easyEnemies.maxiumNum / 1.5);
+            input.hardEnemies.maxiumNum = (int)Math.Floor(input.hardEnemies.maxiumNum / 1.5);
+            input.specialtyEnemies.maxiumNum = (int)Math.Floor(input.specialtyEnemies.maxiumNum / 1.5);
             Plugin.D($"[ApplyNewEnemyLevelForDifficulty] - Easy mode enabled: {input.ToDebugString()}");
         }
         else if (combatDif == CombatDifficulty.Hard)
         {
-            // scale the minimum value up a bit if hard
-            // i.e. min1 = max0 - min0, max1 = max0
-            input.easyEnemies.minimumNum = input.easyEnemies.maxiumNum - input.easyEnemies.minimumNum;
-            input.hardEnemies.minimumNum = input.hardEnemies.maxiumNum - input.hardEnemies.minimumNum;
-            input.specialtyEnemies.minimumNum = input.specialtyEnemies.maxiumNum - input.specialtyEnemies.minimumNum;
+            // force the minimum to 1, if 0
+            input.easyEnemies.minimumNum = input.easyEnemies.minimumNum == 0 ? 1 : input.easyEnemies.minimumNum;
+            input.hardEnemies.minimumNum = input.hardEnemies.minimumNum == 0 ? 1 : input.hardEnemies.minimumNum;
+            input.specialtyEnemies.minimumNum = input.specialtyEnemies.minimumNum == 0 ? 1 : input.specialtyEnemies.minimumNum;
+
+            // if the maximum is 0, bring it up
+            input.easyEnemies.maxiumNum = input.easyEnemies.maxiumNum == 0 ? 2 : input.easyEnemies.maxiumNum;
+            input.hardEnemies.maxiumNum = input.hardEnemies.maxiumNum == 0 ? 2 : input.hardEnemies.maxiumNum;
+            input.specialtyEnemies.maxiumNum = input.specialtyEnemies.maxiumNum == 0 ? 2 : input.specialtyEnemies.maxiumNum;
+
+            // scale the maximum value up a bit if hard
+            // i.e. min1 = min0 + ceil(min0 / 2), max1 = max0 + ceil(min0 / 2)
+            input.easyEnemies.maxiumNum = input.easyEnemies.maxiumNum + (int)Math.Ceiling(input.easyEnemies.minimumNum / 2.0);
+            input.hardEnemies.maxiumNum = input.hardEnemies.maxiumNum + (int)Math.Ceiling(input.hardEnemies.minimumNum / 2.0);
+            input.specialtyEnemies.maxiumNum = input.specialtyEnemies.maxiumNum + (int)Math.Ceiling(input.specialtyEnemies.minimumNum / 2.0);
+            input.easyEnemies.minimumNum = input.easyEnemies.minimumNum + (int)Math.Ceiling(input.easyEnemies.minimumNum / 2.0);
+            input.hardEnemies.minimumNum = input.hardEnemies.minimumNum + (int)Math.Ceiling(input.hardEnemies.minimumNum / 2.0);
+            input.specialtyEnemies.minimumNum = input.specialtyEnemies.minimumNum + (int)Math.Ceiling(input.specialtyEnemies.minimumNum / 2.0);
+
+            // don't let the values be out right
+            input.Clamp(iCombatNumEnemiesSpawnMinDefault, iCombatNumEnemiesSpawnMaxDefault);
+
             Plugin.D($"[ApplyNewEnemyLevelForDifficulty] - Hard mode enabled (hell yeah): {input.ToDebugString()}");
         }
         else
@@ -84,7 +104,9 @@ public class CombatPatch : IPatch
         // this is called first, always
 
         // update the current state based on the pre-generated fields
-        CurrentSpawnCount = __result;
+        // how do csharp refs even work like what benefit does reflection
+        // and garbage collection really provide I want to go back to c++
+        CurrentSpawnCount.CopyFrom(__result);
 
         // modify the new state based on the currently selected difficulty
         var cbtDif = ConfigManager.Instance.GetValue<CombatDifficulty>(eCombatDifficultyId);
@@ -94,22 +116,25 @@ public class CombatPatch : IPatch
     internal void GetNumHardEnemies(ref int __result)
     {
         // this is called second, always
+        int before = __result;
         __result = CurrentSpawnCount.hardEnemies.RandomInt;
-        Plugin.D($"GetNumHardEnemies => {__result}");
+        Plugin.D($"GetNumHardEnemies | ({CurrentSpawnCount.levelInt}) {before} => {__result}");
     }
 
     internal void GetNumSpecialEnemies(ref int __result)
     {
         // this is called third, always
+        int before = __result;
         __result = CurrentSpawnCount.specialtyEnemies.RandomInt;
-        Plugin.D($"GetNumSpecEnemies => {__result}");
+        Plugin.D($"GetNumSpecEnemies | ({CurrentSpawnCount.levelInt}) {before} => {__result}");
     }
 
     internal void GetNumEasyEnemies(ref int __result)
     {
         // this is called fourth, always
+        int before = __result;
         __result = CurrentSpawnCount.easyEnemies.RandomInt;
-        Plugin.D($"GetNumEasyEnemies => {__result}");
+        Plugin.D($"GetNumEasyEnemies | ({CurrentSpawnCount.levelInt}) {before} => {__result}");
     }
 
     [HL.HarmonyPatch(typeof(ScPlanetEnemy), nameof(ScPlanetEnemy.GetEnemyLevel))]
