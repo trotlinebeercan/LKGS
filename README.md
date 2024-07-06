@@ -11,7 +11,9 @@ Current features include:
 - Infinite Health
 - Move around twice as fast
 - Tools Instantly Fully Charge
+- Apply a "Combat Difficulty" setting to lower or increase the number of enemies that can spawn on a planet
 - Open the Workbench and Kitchen for crafting from anywhere
+- Allow custom World Zoom settings (automatically applied, just open the Settings menu and adjust it)
 - Open the in-game development debug menu for l33t h4x1ng
 
 ## Installation
