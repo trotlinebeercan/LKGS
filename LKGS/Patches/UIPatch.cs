@@ -92,7 +92,7 @@ public class UIPatch : UE.MonoBehaviour, IPatch
     private static bool ChangeZoom_Prefix(ScWndSettingsTabMain __instance)
     {
         // update our cached value
-        Plugin.GetStoredPatch<UIPatch>().fZoomLevelOverride = __instance.zoomLevel;
+        Plugin.GetStoredPatch<UIPatch>().fZoomLevelOverride = (float)Math.Round(Math.Clamp(__instance.zoomLevel, fZoomMin, fZoomMax), 1);
 
         // run the necessary UI functions
         __instance.windowResizeScript.SetNewZoomLevel(__instance.zoomLevel);
@@ -112,6 +112,12 @@ public class UIPatch : UE.MonoBehaviour, IPatch
         // overload the function to remove all logic and force set activeZoom
         __instance.zoomLevel = Plugin.GetStoredPatch<UIPatch>().fZoomLevelOverride;
         __instance.activeZoom = Plugin.GetStoredPatch<UIPatch>().fZoomLevelOverride;
+        if (UE.Mathf.Approximately(__instance.zoomLevel, 0f) || UE.Mathf.Approximately(__instance.activeZoom, 0f))
+        {
+            Plugin.E($"SetActiveZoomAmount hit with a 0 - z:{__instance.zoomLevel} // a:{__instance.activeZoom}, forcing to 2f");
+            Plugin.GetStoredPatch<UIPatch>().fZoomLevelOverride = 2f;
+            return SetActiveZoomAmount_Prefix(__instance);
+        }
         Plugin.D($"[zoom] - level={__instance.zoomLevel} // active={__instance.activeZoom}");
         return false;
     }
